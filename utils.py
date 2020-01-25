@@ -22,31 +22,6 @@ PATH_HOSPITAL = os.path.join(path_home, "HOSPITAL.csv")
 PATH_LOGISTICAL = os.path.join(path_home, "LOGISTICAL.csv")
 PATH_HOTEL = os.path.join(path_home, "HOTEL.csv")
 
-@data.route('/logistical_list')
-def logistical_list():
-    try:
-        logisticals = []
-        with open(PATH_LOGISTICAL) as f:
-            for line in f.readlines():
-                logistical = line.strip().split(",")
-                item = {}
-                item["name"] = logistical[0]
-                item["area"] = logistical[1]
-                item["ability"] = logistical[2]
-                item["url"] = logistical[3]
-                item["phone"] = logistical[4]
-                logisticals.append(item)
-        response = {
-            "success" : True,
-            "data" : logisticals,
-        }
-    except Exception as e:
-        response = {
-            "success" : False,
-            "message" : e.message, 
-        }
-    return json.dumps(response,ensure_ascii=False)
-
 @data.route('/hotel_list')
 def hotel_list():
     try:
