@@ -8,20 +8,45 @@ import csv
 import os 
 
 data = Blueprint('register', __name__)
-from index import *
 PATH_HOSPITAL = os.path.join(path_home, "HOSPITAL.csv")
 PATH_LOGISTICAL = os.path.join(path_home, "LOGISTICAL.csv")
 PATH_HOTEL = os.path.join(path_home, "HOTEL.csv")
 if platform.system()=="Linux":
     path_home="/home/wuhan2020/wuhan2020"
 else:
+    from index import app
     path_home=os.path.join(app.root_path,"wuhan2020")
 # wuhan2020文件夹为https://github.com/wuhan2020/wuhan2020项目文件的本地clone
 # 阿里云serverless使用挂载nas远程目录来存放缓存文件；在本机调试时，缓存文件夹将存放在项目根目录
 
 if not os.path.exists(path_home):
     os.mkdir(path_home)
-PATH_HOSPITAL=os.path.join(path_home,"HOSPITAL.csv")
+
+
+@data.route('/logistical_list')
+def logistical_list():
+    try:
+        logisticals = []
+        with open(PATH_LOGISTICAL) as f:
+            for line in f.readlines():
+                logistical = line.strip().split(",")
+                item = {}
+                item["name"] = logistical[0]
+                item["area"] = logistical[1]
+                item["ability"] = logistical[2]
+                item["url"] = logistical[3]
+                item["phone"] = logistical[4]
+                logisticals.append(item)
+        response = {
+            "success" : True,
+            "data" : logisticals,
+        }
+    except Exception as e:
+        response = {
+            "success" : False,
+            "message" : e.message, 
+        }
+    return json.dumps(response,ensure_ascii=False)
 
 
 
