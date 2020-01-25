@@ -126,4 +126,3 @@ def hospital_list():
             "msg":e.message,
         }
     return json.dumps(response,ensure_ascii=False)
-
