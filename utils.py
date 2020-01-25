@@ -11,7 +11,7 @@ data = Blueprint('register', __name__)
 from index import *
 PATH_HOSPITAL = os.path.join(path_home, "HOSPITAL.csv")
 PATH_LOGISTICAL = os.path.join(path_home, "LOGISTICAL.csv")
-
+PATH_HOTEL = os.path.join(path_home, "HOTEL.csv")
 if platform.system()=="Linux":
     path_home="/home/wuhan2020/wuhan2020"
 else:
@@ -24,6 +24,31 @@ if not os.path.exists(path_home):
 PATH_HOSPITAL=os.path.join(path_home,"HOSPITAL.csv")
 
 
+
+@data.route('/hotel_list')
+def hotel_list():
+    try:
+        hotels = []
+        with open(PATH_HOTEL) as f:
+            for line in f.readlines():
+                hotel = line.strip().split(",")
+                item = {}
+                item["name"] = hotel[0]
+                item["area"] = hotel[1]
+                item["address"] = hotel[2]
+                item["bed_nums"] = hotel[3]
+                item["phone"] = hotel[4]
+                logisticals.append(item)
+        response = {
+            "success" : True,
+            "data" : hotel,
+        }
+    except Exception as e:
+        response = {
+            "success" : False,
+            "message" : e.message, 
+        }
+    return json.dumps(response,ensure_ascii=False)
 
 @data.route('/logistical_list')
 def logistical_list():
