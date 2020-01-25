@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint
+import os
+import json
+import datetime
+import platform
 import csv
 import os 
 
@@ -8,13 +12,16 @@ from index import *
 PATH_HOSPITAL = os.path.join(path_home, "HOSPITAL.csv")
 PATH_LOGISTICAL = os.path.join(path_home, "LOGISTICAL.csv")
 
-@data.before_request
-def before(*args,**kwargs):
-    pass
+if platform.system()=="Linux":
+    path_home="/home/wuhan2020/wuhan2020"
+else:
+    path_home=os.path.join(app.root_path,"wuhan2020")
+# wuhan2020文件夹为https://github.com/wuhan2020/wuhan2020项目文件的本地clone
+# 阿里云serverless使用挂载nas远程目录来存放缓存文件；在本机调试时，缓存文件夹将存放在项目根目录
 
-@data.route('/index')
-def index():
-    return "hello world"
+if not os.path.exists(path_home):
+    os.mkdir(path_home)
+PATH_HOSPITAL=os.path.join(path_home,"HOSPITAL.csv")
 
 
 
@@ -51,7 +58,9 @@ def hospital_list():
         hospitals = []
         for hospital in data:
             item = {}
-            item["province"] = hospital[0]
+            if len(hospital)!=8:
+                continue
+            item["province"]=hospital[0]
             item["name"] = hospital[1]
             item["address"] = hospital[2]
             item["people"] = hospital[3]
