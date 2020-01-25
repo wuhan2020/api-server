@@ -40,7 +40,7 @@ def hotel_list():
                 logisticals.append(item)
         response = {
             "success" : True,
-            "data" : hotel,
+            "data" : hotels,
         }
     except Exception as e:
         response = {
