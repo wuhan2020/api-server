@@ -7,6 +7,7 @@ import platform
 import csv
 import os
 import traceback
+import yaml
 
 from const import *
 
@@ -44,6 +45,28 @@ def csv_helper(fpath, headers):
             result.append(dict(zip(headers,csv_data)))
     return result
 
+def yaml_helper(fpath):
+    result = []
+    with open(fpath, 'r') as f:
+        result = yaml.load(f)
+    return result
+
+
+@data.route('/hospital_list')
+def hospital_list():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = yaml_helper(HOSPITAL_PATH)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
 
 @data.route('/hotel_list')
 def hotel_list():
@@ -59,6 +82,22 @@ def hotel_list():
     except Exception as e:
         resp['msg'] = str(e)
     return json.dumps(resp, ensure_ascii=False)
+
+@data.route('/logstics_list')
+def logstics_list():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = csv_helper(LOGISITICAL_PATH, LOGISITICAL_HEADERS)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
 
 
 @data.route('/news_list')
