@@ -8,9 +8,6 @@ import csv
 import os 
 
 data = Blueprint('register', __name__)
-PATH_HOSPITAL = os.path.join(path_home, "HOSPITAL.csv")
-PATH_LOGISTICAL = os.path.join(path_home, "LOGISTICAL.csv")
-PATH_HOTEL = os.path.join(path_home, "HOTEL.csv")
 if platform.system()=="Linux":
     path_home="/home/wuhan2020/wuhan2020"
 else:
@@ -21,7 +18,9 @@ else:
 
 if not os.path.exists(path_home):
     os.mkdir(path_home)
-
+PATH_HOSPITAL = os.path.join(path_home, "HOSPITAL.csv")
+PATH_LOGISTICAL = os.path.join(path_home, "LOGISTICAL.csv")
+PATH_HOTEL = os.path.join(path_home, "HOTEL.csv")
 
 @data.route('/logistical_list')
 def logistical_list():
@@ -47,8 +46,6 @@ def logistical_list():
             "message" : e.message, 
         }
     return json.dumps(response,ensure_ascii=False)
-
-
 
 @data.route('/hotel_list')
 def hotel_list():
