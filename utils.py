@@ -37,7 +37,7 @@ def hotel_list():
                 item["address"] = hotel[2]
                 item["bed_nums"] = hotel[3]
                 item["phone"] = hotel[4]
-                logisticals.append(item)
+                hotels.append(item)
         response = {
             "success" : True,
             "data" : hotels,
