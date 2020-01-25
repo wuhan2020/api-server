@@ -8,6 +8,7 @@ import csv
 
 data= Blueprint('register', __name__)
 from index import *
+PATH_HOSPITAL=os.path.join(path_home,"HOSPITAL.csv")
 
 if platform.system()=="Linux":
     path_home="/home/wuhan2020/wuhan2020"
