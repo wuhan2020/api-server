@@ -1,0 +1,95 @@
+{
+  "label_setup": {
+    "version": 1,
+    "labels": [
+      {
+        "__merge__": true
+      },
+      {
+        "name": "pull/approved",
+        "description": "If a pull is approved, it will be automatically merged",
+        "color": "008672"
+      }
+    ]
+  },
+  "role": {
+    "version": 1,
+    "roles": [
+      {
+        "name": "replier",
+        "description": "Replier is responsible for reply issues in time",
+        "users": [
+          "LiuChangFreeman",
+          "JamesBonddu"
+        ],
+        "commands": []
+      },
+      {
+        "name": "approver",
+        "description": "After approvers' approve, pulls should be merged automatically",
+        "users": [
+          "LiuChangFreeman",
+          "JamesBonddu"
+        ],
+        "commands": [
+          "/approve"
+        ]
+      },
+      {
+        "name": "author",
+        "description": "Author of the issue or pull",
+        "users": [],
+        "commands": []
+      },
+      {
+        "name": "notauthor",
+        "description": "Not author of the issue or pull",
+        "users": [],
+        "commands": [
+          "/approve"
+        ]
+      },
+      {
+        "name": "anyone",
+        "description": "Anyone",
+        "users": [],
+        "commands": [
+          "/self-assign"
+        ]
+      }
+    ]
+  },
+  "command": {
+    "version": 1,
+    "commands": [
+      {
+        "name": "/approve",
+        "scopes": [
+          "review",
+          "review_comment",
+          "pull_comment"
+        ]
+      }
+    ]
+  },
+  "approve": {
+    "version": 1
+  },
+  "auto_merge": {
+    "version": 1,
+    "sched": "0 */5 * * * *"
+  },
+  "issue_reminder": {
+    "version": 1
+  },
+  "auto_label": {
+    "version": 1
+  },
+  "self_assign": {
+    "version": 1
+  },
+  "weekly_report": {
+    "version": 1,
+    "generateTime": "0 0 12 * * 1"
+  }
+}
