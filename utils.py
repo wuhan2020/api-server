@@ -41,24 +41,9 @@ def csv_helper(fpath, headers):
     with open(fpath) as f:
         for line in f.readlines():
             csv_data = line.strip().split(",")
-            result.append(dict(zip(csv_data)))
+            result.append(dict(zip(headers,csv_data)))
     return result
 
-
-@data.route('/logistical_list')
-def logistical_list():
-    resp = {
-        'success': False,
-        'data': [],
-        'msg': '',
-    }
-    try:
-        resp_data = csv_helper(LOGISITICAL_PATH, LOGISTICS_HEADERS)
-        resp['success'] = True
-        resp['data'] = resp_data
-    except Exception as e:
-        resp['msg'] = str(e)
-    return json.dumps(resp, ensure_ascii=False)
 
 @data.route('/hotel_list')
 def hotel_list():
