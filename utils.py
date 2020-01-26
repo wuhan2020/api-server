@@ -5,7 +5,11 @@ import json
 import datetime
 import platform
 import csv
-import os 
+import os
+import traceback
+import yaml
+
+from const import *
 
 data = Blueprint('register', __name__)
 if platform.system()=="Linux":
@@ -18,88 +22,146 @@ else:
 
 if not os.path.exists(path_home):
     os.mkdir(path_home)
+    
+"""
+CACHE PATH
+"""
+HOSPITAL_PATH = os.path.join(path_home, "HOSPITAL.csv")
+HOTEL_PATH = os.path.join(path_home, "HOTEL.csv")
+LOGISITICAL_PATH = os.path.join(path_home, "LOGISITICAL.csv")
+NEWS_PATH = os.path.join(path_home, "NEWS.csv")
+DONATION_PATH = os.path.join(path_home, "DONATION.csv")
+FACTORY_PATH = os.path.join(path_home, "FACTORY.csv")
+CLINIC_PATH = os.path.join(path_home, "CLINIC.csv")
 
-PATH_HOSPITAL = os.path.join(path_home, "HOSPITAL.csv")
-PATH_LOGISTICAL = os.path.join(path_home, "LOGISTICAL.csv")
-PATH_HOTEL = os.path.join(path_home, "HOTEL.csv")
+
+"""
+Tools
+"""
+def csv_helper(fpath, headers):
+    result = []
+    with open(fpath) as f:
+        for line in f.readlines():
+            csv_data = line.strip().split(",")
+            result.append(dict(zip(headers,csv_data)))
+    return result
+
+def yaml_helper(fpath):
+    result = []
+    with open(fpath, 'r') as f:
+        result = yaml.load(f)
+    return result
+
+
+@data.route('/hospital_list')
+def hospital_list():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = yaml_helper(HOSPITAL_PATH)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+
 
 
 @data.route('/hotel_list')
 def hotel_list():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
     try:
-        hotels = []
-        with open(PATH_HOTEL) as f:
-            for line in f.readlines():
-                hotel = line.strip().split(",")
-                item = {}
-                item["name"] = hotel[0]
-                item["area"] = hotel[1]
-                item["address"] = hotel[2]
-                item["bed_nums"] = hotel[3]
-                item["phone"] = hotel[4]
-                hotels.append(item)
-        response = {
-            "success" : True,
-            "data" : hotels,
-        }
+        resp_data = csv_helper(HOTEL_PATH, HOTEL_HEADERS)
+        resp['success'] = True
+        resp['data'] = resp_data
     except Exception as e:
-        response = {
-            "success" : False,
-            "message" : e.message, 
-        }
-    return json.dumps(response,ensure_ascii=False)
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
 
-@data.route('/logistical_list')
-def logistical_list():
+@data.route('/logstics_list')
+def logstics_list():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
     try:
-        logisticals = []
-        with open(PATH_LOGISTICAL) as f:
-            for line in f.readlines():
-                logistical = line.strip().split(",")
-                item = {}
-                item["name"] = logistical[0]
-                item["area"] = logistical[1]
-                item["ability"] = logistical[2]
-                item["url"] = logistical[3]
-                item["phone"] = logistical[4]
-                logisticals.append(item)
-        response = {
-            "success" : True,
-            "data" : logisticals,
-        }
+        resp_data = csv_helper(LOGISITICAL_PATH, LOGISITICAL_HEADERS)
+        resp['success'] = True
+        resp['data'] = resp_data
     except Exception as e:
-        response = {
-            "success" : False,
-            "message" : e.message, 
-        }
-    return json.dumps(response,ensure_ascii=False)
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
 
-@data.route('/hospital_list')
-def hospital_list():
+
+
+@data.route('/news_list')
+def news_list():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
     try:
-        data = csv.reader(open(PATH_HOSPITAL, 'r'))
-        next(data)
-        hospitals = []
-        for hospital in data:
-            item = {}
-            if len(hospital)!=8:
-                continue
-            item["province"]=hospital[0]
-            item["name"] = hospital[1]
-            item["address"] = hospital[2]
-            item["people"] = hospital[3]
-            item["need"] = hospital[4]
-            item["link"] = hospital[5]
-            item["phone"] = hospital[6]
-            item["extra"] = hospital[7]
-            hospitals.append(item)
-        response = {
-            "success" : True,
-            "data": hospitals,
-        }
+        resp_data = csv_helper(NEWS_PATH, NEWS_HEADERS)
+        resp['success'] = True
+        resp['data'] = resp_data
     except Exception as e:
-        response = {
-            "success":False,
-            "msg":e.message,
-        }
-    return json.dumps(response,ensure_ascii=False)
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+
+@data.route('/donation_list')
+def donation_list():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = csv_helper(DONATION_PATH, DONATION_HEADERS)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+
+@data.route('/factory_list')
+def factory_list():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = csv_helper(FACTORY_PATH, FACTORY_HEADERS)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+
+@data.route('/clinic_list')
+def clinic_list():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = csv_helper(CLINIC_PATH, CLINC_HEADERS)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
