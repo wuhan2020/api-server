@@ -18,9 +18,11 @@ else:
 
 if not os.path.exists(path_home):
     os.mkdir(path_home)
+
 PATH_HOSPITAL = os.path.join(path_home, "HOSPITAL.csv")
 PATH_LOGISTICAL = os.path.join(path_home, "LOGISTICAL.csv")
 PATH_HOTEL = os.path.join(path_home, "HOTEL.csv")
+
 
 @data.route('/hotel_list')
 def hotel_list():
@@ -38,7 +40,7 @@ def hotel_list():
                 hotels.append(item)
         response = {
             "success" : True,
-            "data" : hotel,
+            "data" : hotels,
         }
     except Exception as e:
         response = {
