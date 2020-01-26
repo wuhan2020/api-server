@@ -28,7 +28,7 @@ CACHE PATH
 """
 HOSPITAL_PATH = os.path.join(path_home, "HOSPITAL.csv")
 HOTEL_PATH = os.path.join(path_home, "HOTEL.csv")
-LOGISITICAL_PATH = os.path.join(path_home, "LOGISITICAL.csv")
+LOGISITICAL_PATH = os.path.join(path_home, "LOGISTICAL.csv")
 NEWS_PATH = os.path.join(path_home, "NEWS.csv")
 DONATION_PATH = os.path.join(path_home, "DONATION.csv")
 FACTORY_PATH = os.path.join(path_home, "FACTORY.csv")
@@ -41,7 +41,7 @@ Tools
 def csv_helper(fpath, headers):
     result = []
     with open(fpath) as f:
-        for line in f.readlines():
+        for line in f.readlines()[1:]:
             csv_data = line.strip().split(",")
             result.append(dict(zip(headers,csv_data)))
     return result
@@ -61,7 +61,7 @@ def hospital_list():
         'msg': '',
     }
     try:
-        resp_data = yaml_helper(HOSPITAL_PATH)
+        resp_data = csv_helper(HOSPITAL_PATH,HOTEL_HEADERS)
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
@@ -94,7 +94,7 @@ def logstics_list():
         'msg': '',
     }
     try:
-        resp_data = csv_helper(LOGISITICAL_PATH, LOGISITICAL_HEADERS)
+        resp_data = csv_helper(LOGISITICAL_PATH,LOGISTICS_HEADERS )
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
@@ -159,7 +159,7 @@ def clinic_list():
         'msg': '',
     }
     try:
-        resp_data = csv_helper(CLINIC_PATH, CLINC_HEADERS)
+        resp_data = csv_helper(CLINIC_PATH,CLINIC_HEADERS)
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
