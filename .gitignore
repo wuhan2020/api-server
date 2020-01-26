@@ -2,8 +2,9 @@
 # all denpencies
 /*
 # except for what we want
-!*.py
+!**/*.py
 !bootstrap
-!*.txt
-!*.md
+!**/*.txt
+!**/*.md
+!**/*.yaml
 !.gitignore
