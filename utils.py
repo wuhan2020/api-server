@@ -22,6 +22,7 @@ else:
 
 if not os.path.exists(path_home):
     os.mkdir(path_home)
+    
 """
 CACHE PATH
 """
@@ -66,6 +67,8 @@ def hospital_list():
     except Exception as e:
         resp['msg'] = str(e)
     return json.dumps(resp, ensure_ascii=False)
+
+
 
 
 @data.route('/hotel_list')
