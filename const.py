@@ -42,3 +42,7 @@ NEWS_HEADERS = [
     'news_time',
     'news_link',
 ]
+COMPLAINT_HEADERS = [
+    'COMPLAINT_name',
+    'COMPLAINT_phone'
+]

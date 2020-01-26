@@ -33,7 +33,7 @@ NEWS_PATH = os.path.join(path_home, "NEWS.csv")
 DONATION_PATH = os.path.join(path_home, "DONATION.csv")
 FACTORY_PATH = os.path.join(path_home, "FACTORY.csv")
 CLINIC_PATH = os.path.join(path_home, "CLINIC.csv")
-
+COMPLAINT_PATH = os.path.join(path_home, "COMPLAINT.csv")
 
 """
 Tools
@@ -160,6 +160,21 @@ def clinic_list():
     }
     try:
         resp_data = csv_helper(CLINIC_PATH,CLINIC_HEADERS)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+@data.route('/complaint_list')
+def complaint_list():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = csv_helper(COMPLAINT_PATH,COMPLAINT_HEADERS)
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
