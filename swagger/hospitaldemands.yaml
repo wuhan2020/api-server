@@ -119,4 +119,12 @@ components:
         demands:
           type: array
           items:
-              $ref: 'supplies.yaml#/components/schemas/SupplyItem'
+              type: object
+              required:
+              - supply
+              properties:
+                supply:
+                  $ref: 'supplies.yaml#/components/schemas/SupplyItem'
+                remark:
+                  type: string
+                  example: 需符合或高于下列国家标准,医用一次性防护服技术要求
