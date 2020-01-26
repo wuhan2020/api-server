@@ -9,7 +9,7 @@ git clone https://github.com/wuhan2020/wuhan2020
 pip install -r requirements.txt
 bash bootstrap
 ```
-然后就可以在http://your-ip:9000/wuhan2020/调试api
+然后就可以在`http://your-ip:9000/wuhan2020/`调试api
 ## 项目文件说明
 
 ```
