@@ -1,7 +1,9 @@
 openapi: 3.0.2
 info:
   description: This is Hostpital Demands API
+
   version: 0.2.0
+
   title: Hostpital Demands API
   # put the contact info for your development or API team
   contact:
@@ -96,6 +98,7 @@ paths:
             schema:
               $ref: 'validations.yaml#/components/schemas/SuspendItem'
         description: Hospital Demands item to suspend 取消医院需求item        
+
 servers:
   - url: 'https://virtserver.swaggerhub.com/wuhan2020/hospitaldemands/0.2.0'
 components:
@@ -103,7 +106,7 @@ components:
     HospitalDemandItem:
       type: object
       required:
-      - hospital      
+      - hospitDevelopal      
       - demands
       - contact
       - releaseDate
@@ -115,6 +118,7 @@ components:
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
         hospital:
           $ref: 'hospitals.yaml#/components/schemas/HospitalItem'
+
         validation:
           $ref: 'validations.yaml#/components/schemas/ValidationItem'
         releaseDate:
