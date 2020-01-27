@@ -1,0 +1,138 @@
+openapi: 3.0.2
+info:
+  description: This API provides Donation list
+  version: 0.2.0
+  title: Donation List API
+  contact:
+    email: wuhan2020@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: contributors
+    description: Secured write permission calls
+  - name: developers
+    description: Operations available to regular developers
+paths:
+  /donation:
+    get:
+      tags:
+        - developers
+      summary: searches donation
+      operationId: searchDonation
+      description: |
+        By passing in the appropriate options, you can search for
+        available inventory in the system
+      parameters:
+        - in: query
+          name: searchString
+          description: pass an optional search string for looking up inventory
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: skip
+          description: number of records to skip for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DonationItem'
+        '400':
+          description: bad input parameter
+    post:
+      tags:
+        - contributors
+      summary: adds a donation item
+      operationId: addDonation
+      description: Adds an item to the system
+      responses:
+        '201':
+          description: item created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: an existing item already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DonationItem'
+        description: Donation item to add
+servers:
+  - url: 'https://virtserver.swaggerhub.com/wuhan2020/donation/0.2.0'
+components:
+  schemas:
+    DonationItem:
+      type: object
+      required:
+        - id
+        - source
+        - donate_way
+        - offical_link
+        - contact
+        - cur_status
+        - source_link
+        - audit_status
+        - update_time
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        source:
+          type: string
+          example: 红十字会
+        donate_way:
+          type: string
+          example: 支付宝
+        offical_link:
+          type: string
+          format: uri
+          example: https://mp.weixin.qq.com/s/qGAsMA4hsduP99CaabdQDg
+        contact:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactItem'
+        cur_status:
+          type: string
+          example: 已捐赠; 筹款中;
+        source_link:
+          type: string
+          format: uri
+          example: https://mp.weixin.qq.com/s/qGAsMA4hsduP99CaabdQDg
+        audit_status:
+          type: string
+          example: 已审计; 审计中;
+        update_time:
+          type: string
+          format: date-time
+          example: '2020-01-23T09:12:33.001Z'
+    ContactItem:
+      type: object
+      required:
+        - name
+        - phone
+      properties:
+        name:
+          type: string
+          example: xxx
+        phone:
+          type: string
+          example: 12315
