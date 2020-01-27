@@ -1,2 +1,3 @@
 Flask==1.1.1
 PyYAML==5.3
+flask-swagger==0.2.14
