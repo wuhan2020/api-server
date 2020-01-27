@@ -9,7 +9,8 @@ git clone https://github.com/wuhan2020/wuhan2020
 pip install -r requirements.txt
 bash bootstrap
 ```
-然后就可以在`http://your-ip:9000/wuhan2020/`调试api
+然后就可以在`http://your-ip:5000/wuhan2020/[list_path]`调试api
+注意`list_path`是在`utils.py`中被`data.route`注册的path
 ## 项目文件说明
 
 ```
@@ -46,8 +47,8 @@ app.register_blueprint(data, url_prefix=path_prefix)
 #使用flask蓝图功能来注册http-router
 
 if __name__ == '__main__':
-    port = os.environ.get("FC_SERVER_PORT", "9000")
-    app.run(host='0.0.0.0', port=int(port))
+    # 使用默认端口5000
+    app.run()
 ```
 ## 前端项目issues
 https://github.com/wuhan2020/front-pages/issues

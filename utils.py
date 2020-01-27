@@ -17,6 +17,7 @@ if platform.system()=="Linux":
 else:
     from index import app
     path_home=os.path.join(app.root_path,"wuhan2020")
+    print(path_home)
 # wuhan2020文件夹为https://github.com/wuhan2020/wuhan2020项目文件的本地clone
 # 阿里云serverless使用挂载nas远程目录来存放缓存文件；在本机调试时，缓存文件夹将存放在项目根目录
 
