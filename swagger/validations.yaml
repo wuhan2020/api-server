@@ -1,0 +1,216 @@
+openapi: 3.0.2
+info:
+  description: This API provides Base Validation Item list and validation feature
+  version: 0.1.0
+  title: Validation API
+  contact:
+    email: wuhan2020@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: contributors
+    description: Secured write permission calls
+  - name: reviewers
+    description: Secured write 'reviewState' field permission update calls
+  - name: developers
+    description: Operations available to regular developers
+paths:
+  /validations:
+    get:
+      tags:
+        - developers
+      summary: searches validations
+      operationId: searchValidations
+      description: |
+        By passing in the appropriate options, you can search for
+        existing validations in the system
+      parameters:
+        - in: query
+          name: searchString
+          description: pass an optional search string for looking up validations
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: skip
+          description: number of records to skip for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValidationItem'
+        '400':
+          description: bad input parameter
+    post:
+      tags:
+        - contributors
+      summary: adds a accomodation item
+      operationId: addValidation
+      description: Adds an item to the system
+      responses:
+        '201':
+          description: item created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: an existing item already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationItem'
+        description: Validation item to add
+    put:
+      tags:
+        - reviewers
+      summary: adds a accomodation item
+      operationId: updateValidation
+      description: Update an item with 'approved' status the system
+      responses:
+        '201':
+          description: 'item updated'
+        '400':
+          description: 'invalid input, object invalid'
+        '403':
+          description: 'forbidden'
+        '404':
+          description: 'item not found'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationItem'
+        description: Validation item to add
+servers:
+  - url: 'https://virtserver.swaggerhub.com/wuhan2020/validations/0.1.0'
+components:
+  schemas:
+    ValidationItem:
+      type: object
+      required:
+        - id
+        - url
+        - name
+        - source
+        - sourcetype
+        - releaseDate
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        url:
+          type: string
+          format: uri
+          example: https://paper.people.com.cn
+        name:
+          type: string
+          example: 湖北紧急求援
+        source:
+          type: string
+          example: 人民日报海外版
+        sourcetype:
+          type: string
+          enum: ['hospitaldemand','patientreport','logistic','accommodation','supplies','general']
+        releaseDate:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        contributor:
+          $ref: '#/components/schemas/Operator'
+        reviewStates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReviewState'
+    Operator:
+      type: object
+      required:
+        - id
+        - username
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851        
+        username:
+          type: string
+          example: 我的网名是柱子
+        email:
+          type: string
+          format: email        
+    ReviewState:
+      type: object
+      required:
+        - status
+        - reviewDate
+      properties:
+        status:
+          type: string
+          enum: ['truth','uncertain','false']
+          example: 已验证为真实 truth
+          default: 'uncertain'
+        reviewDate:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        reviewer:
+          $ref: '#/components/schemas/Operator'    
+    Contact:
+      type: object
+      required:
+        - name
+        - phone
+      properties:
+        name:
+          type: string
+          example: 王老师,李经理
+        phone:
+          type: array
+          items:
+            type: string
+            example: 21-221111111
+    SuspendItem:
+      type: object
+      required:
+        - id
+        - reason
+        - validation
+        - suspendDate
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+          description: 应取消的项目的id,例如医院需求id        
+        reason:
+          oneOf:
+           - type: string
+             enum: ['已过时','判定不真实','已撤销','已完成','已结束']
+           - type: object
+             properties:
+               desc:
+                 type: string
+                 example: 外界不可抗力
+        validation:
+          $ref: '#/components/schemas/ValidationItem'
+        suspendDate:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'

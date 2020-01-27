@@ -2,7 +2,7 @@ openapi: 3.0.2
 info:
   description: This API provides Supplies list
   version: 0.2.0
-  title: Supplies List API
+  title: Supplies Units List API
   contact:
     email: wuhan2020@your-company.com
   license:
@@ -14,19 +14,19 @@ tags:
   - name: developers
     description: Operations available to regular developers
 paths:
-  /supplies:
+  /suppliesunits:
     get:
       tags:
         - developers
-      summary: searches supplies
-      operationId: searchSupplies
+      summary: searches supplies units
+      operationId: searchSuppliesUnits
       description: |
         By passing in the appropriate options, you can search for
-        available supplies in the system
+        available supplies units in the system
       parameters:
         - in: query
           name: searchString
-          description: pass an optional search string for looking up supplies
+          description: pass an optional search string for looking up inventory
           required: false
           schema:
             type: string
@@ -53,7 +53,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SupplyItem'
+                  $ref: '#/components/schemas/SupplyItemUnit'
         '400':
           description: bad input parameter
     post:
@@ -73,18 +73,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SupplyItem'
+              $ref: '#/components/schemas/SupplyItemUnit'
         description: Supply item to add
 servers:
-  - url: 'https://virtserver.swaggerhub.com/wuhan2020/supplies/0.2.0'
+  - url: 'https://virtserver.swaggerhub.com/wuhan2020/suppliesunits/0.2.0'
 components:
   schemas:
-    SupplyItem:
+    SupplyItemUnit:
       type: object
       required:
         - id
         - name
-        - std
+        - unitamount
+        - volume
       properties:
         id:
           type: string
@@ -92,23 +93,88 @@ components:
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
         name:
           type: string
-          example: 医用口罩
-        std:
-          type: array
-          items:
-            $ref: '#/components/schemas/Standard'
+          example: 箱
+        unitamount:
+          type: integer
+          format: int32
+          example: 250
+        desc:
+          type: string
+          example: 1箱口罩250个
+        volume: 
+          type: object
+          required:
+            - length
+            - height
+            - width
+          properties:
+            length:
+              $ref: '#/components/schemas/Length'
+            height:
+              $ref: '#/components/schemas/Length'
+            width:
+              $ref: '#/components/schemas/Length'
+        weight:
+          $ref: '#/components/schemas/Weight'
         releaseDate:
           type: string
           format: date-time
           example: '2016-08-29T09:12:33.001Z'
-    Standard:
+    Unit:
+      oneOf:
+        - $ref: '#/components/schemas/Length'
+        - $ref: '#/components/schemas/Size'
+        - $ref: '#/components/schemas/Weight'
+        - $ref: '#/components/schemas/Volume'
+    Size:
       type: object
       required:
-        - name
+        - amount
+        - unit
       properties:
-        name:
+        amount: 
+          type: integer
+          format: int32
+        unit:
           type: string
-          example: GB 19083-2010
-        desc:
+          enum: ['#']
+          description: 号
+    Length:      
+      type: object
+      required:
+        - amount
+        - unit
+      properties:
+        amount: 
+          type: number
+          format: float
+        unit:
           type: string
-          example: 国家标医用标准
+          enum: [CM, M]
+          description: 米, 厘米
+    Weight:
+      type: object
+      required:
+        - amount
+        - unit
+      properties:
+        amount: 
+          type: number
+          format: float
+        unit:
+          type: string
+          enum: [g, kg, ton]
+          description: 克, 千克, 吨
+    Volume:
+      type: object
+      required:
+        - amount
+        - unit
+      properties:
+        amount: 
+          type: number
+          format: float
+        unit:
+          type: string
+          enum: [ml, L]
+          description: 毫升,升
