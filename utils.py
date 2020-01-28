@@ -9,6 +9,10 @@ import os
 import traceback
 import yaml
 
+import xmltodict
+
+import json
+
 from const import *
 
 data = Blueprint('register', __name__)
@@ -51,6 +55,30 @@ def yaml_helper(fpath):
     with open(fpath, 'r') as f:
         result = yaml.load(f)
     return result
+
+
+def xml_helper(xml_path):
+    with open(xml_path, 'r') as f:
+        xml_str = f.read()
+    json = xmltodict.parse(xml_str)
+    return json
+
+
+def json_helper(json_path):
+    with open(json_path, 'r', encoding='UTF-8') as f:
+        return json.loads(f.read())
+
+
+@data.route('/json_test')
+def json_test():
+    path = os.path.join("/root/api-server/", "test.json")
+    return json_helper(path)
+
+
+@data.route('/xml_test')
+def xml_test():
+    path = os.path.join("/root/api-server/", "test.xml")
+    return xml_helper(path)
 
 
 @data.route('/hospital_list')
