@@ -17,6 +17,15 @@ FACTORY_HEADERS = [
     'factory_capacity',
     'factory_contact',
 ]
+HOSPICAL_HEADERS = [
+    'hospital_name',
+    'hospital_addr',
+    'hospital_headcount',
+    'hospital_requirement',
+    'hospital_link',
+    'hospital_contact',
+    'hospital_comment'
+]
 CLINIC_HEADERS = [
     'clinic_unit',
     'clinic_contact',
