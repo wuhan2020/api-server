@@ -10,6 +10,22 @@ pip install -r requirements.txt
 bash bootstrap
 ```
 然后就可以在`http://your-ip:9000/wuhan2020/`调试api
+
+## Docker 容器运行
+需要安装[Docker客户端](https://www.docker.com/products/docker-desktop).
+
+### Build Docker Image
+在本项目根目录下执行 `docker build -t api-server:default .`. 
+注意国内这一步可能会耗时较长.
+
+### Run Docker Image
+执行 `docker run --name api-server --publish 5000:5000 api-server:default ` 后可在本地浏览器中打开http://localhost:5000/wuhan2020/{endpoint}. (使用 `-d` 进入detach模式)
+
+_如果出现 `The container name "/api-server" is already in use` 报错可先执行 `docker rm api-server` 删除残留的同名容器._
+
+### Stop Docker Container
+执行 `docker stop api-server `停止运行中的容器.
+
 ## 项目文件说明
 
 ```
