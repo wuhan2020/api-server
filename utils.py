@@ -83,8 +83,10 @@ def hospitals():
             hosptials_data_len = len(hosptials_data)
             if skip < 0 or limit < 0 or limit > 50:
                 raise Exception('Bad input parameter.')
-            if skip + limit > hosptials_data_len:
+            if skip > hosptials_data_len:
                 raise Exception("Index out of range.")
+            if skip + limit > hosptials_data_len:
+                limit = hosptials_data_len - skip
             resp['data'] = hosptials_data[skip:skip+limit]
         else:
             resp['data'] = hosptials_data
