@@ -41,7 +41,7 @@ CLINIC_PATH = os.path.join(path_home, "CLINIC.csv")
 
 HOSPITAL_JSON = os.path.join(path_home, "HOSPITAL.json")
 HOTEL_JSON = os.path.join(path_home, "HOTEL.json")
-LOGISITICAL_JSON = os.path.join(path_home, "LOGISTICAL.json")
+LOGISTICS_JSON = os.path.join(path_home, "LOGISTICS.json")
 NEWS_JSON = os.path.join(path_home, "NEWS.json")
 DONATION_JSON = os.path.join(path_home, "DONATION.json")
 FACTORY_JSON = os.path.join(path_home, "FACTORY.json")
@@ -243,7 +243,7 @@ def logstics_list_json():
         'msg': '',
     }
     try:
-        resp_data = json_helper(LOGISITICAL_JSON)
+        resp_data = json_helper(LOGISTICS_JSON)
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
