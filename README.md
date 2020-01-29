@@ -84,7 +84,7 @@ pip install -r requirements.txt
 bash bootstrap
 ```
 
-And then debug APIs at `http://your-ip:9000/wuhan2020/`
+And then debug APIs at `http://your-ip:9000/wuhan2020/`.
 Note that `list_path` is the registered path in `utils.py` by `data.route`,
 `your-ip` is 127.0.0.1 by default.
 
@@ -107,9 +107,9 @@ Run `docker stop api-server `to stop running containers.
 
 ```
 .
-├── bootstrap Serverless Launch Script)
-├── index.py (Flask Application Default Configuration Script)
-└── utils.py (Flask Blueprint Script)
+├── bootstrap (Serverless Launch Script)
+├── index.py  (Flask Application Default Configuration Script)
+└── utils.py  (Flask Blueprint Script)
 ```
 **index.py**
 ```python
