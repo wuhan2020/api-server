@@ -18,7 +18,7 @@ bash bootstrap
 需要安装[Docker客户端](https://www.docker.com/products/docker-desktop).
 
 ### Build Docker Image
-在本项目根目录下执行 `docker build -t api-server:default .`. 
+在本项目根目录下执行 `docker build -t api-server:default .`.
 
 * 注意：国内这一步可能会耗时较长.
 
@@ -34,41 +34,45 @@ _如果出现 `The container name "/api-server" is already in use` 报错可先�
 
 ```
 .
-├── bootstrap(阿里云serverless启动脚本)
-├── index.py(flask应用默认配置脚本)
-└── utils.py(flask蓝图功能)
+├── bootstrap (阿里云serverless启动脚本)
+├── config (flask config dir)
+├── swagger (swagger 暂时还不能用, 待适配.)
+├── test (test 数据目录, 参照wuhan2020的[readme](https://github.com/wuhan2020/wuhan2020), 移除个人的联系方式和银行卡信息.)
+├── wuhan2020 (submoudle, 用于获取data-sync同步过来的数据.)
+├── index.py (flask应用默认配置脚本)
+└── utils.py (flask蓝图, 目前有csv和json的接口, csv的加上了bearer token 认证, json的接口暂时不能用.)
 ```
-**index.py**说明
-```python
-# -*- coding: utf-8 -*-
-from flask import Flask,session,request,Blueprint
-import os
-import sys
-import json
-import platform
-import datetime
-from utils import data
 
-app = Flask(__name__)
-app.debug = True # 默认开启debug
-path_prefix= "/wuhan2020"
-# url请求前缀，默认要加/wuhan2020
-if platform.system()=="Linux":
-    path_home="/home/wuhan2020/wuhan2020"
-else:
-    path_home=os.path.join(app.root_path,"wuhan2020")
-# 阿里云serverless使用挂载nas远程目录来存放缓存文件
-# 在本机调试时，缓存文件夹将存放在项目根目录
-if not os.path.exists(path_home):
-    os.mkdir(path_home)
-app.register_blueprint(data, url_prefix=path_prefix)
-#使用flask蓝图功能来注册http-router
+## 配置说明
 
-if __name__ == '__main__':
-    # 使用aliyun默认端口9000
-    port = os.environ.get("FC_SERVER_PORT", "9000")
-    app.run(host='127.0.0.1', port=int(port))
 ```
+# Flask config
+Config
+
+# cache dir
+CacheCfg
+ - csv;
+ - json;
+```
+
+## 测试
+
+`dev url`是 `http://127.0.0.1:9000/wuhan2020/xxx_list`
+
+```sh
+# dev
+curl --location --request GET '127.0.0.1:9000/wuhan2020/logistical_list' \
+--header 'Authorization: Bearer test-safe-wuhan'
+# product
+curl --location --request GET '127.0.0.1:9000/wuhan2020/logistical_list' \
+--header 'Authorization: Bearer product-token'
+```
+
+## 遗留问题
+
+- [ ] 添加swagger适配;
+- [ ] csv转换出来都是拍平的字段, 里面有部分中文转英文需要帮助转成合适的英文, 实在找不到用拼音替代.
+
 
 ## 前端项目issues
 https://github.com/wuhan2020/WebApp/issues
