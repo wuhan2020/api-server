@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import  Flask
+from flask import Flask
 from werkzeug.wrappers import Response as ResponseBase
 from utils import data
 import os

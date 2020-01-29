@@ -7,7 +7,7 @@ DONATION_HEADERS = [
     'donate_way',
     'donate_link',
     'donate_contact',
-    'donate_status',
+    'donate_status'
 ]
 FACTORY_HEADERS = [
     'factory_name',
@@ -15,12 +15,12 @@ FACTORY_HEADERS = [
     'factory_addr',
     'factory_prod_type',
     'factory_capacity',
-    'factory_contact',
+    'factory_contact'
 ]
 CLINIC_HEADERS = [
     'clinic_unit',
     'clinic_contact',
-    'clinic_note',
+    'clinic_note'
 ]
 HOTEL_HEADERS = [
     'hotel_name',
@@ -40,5 +40,5 @@ NEWS_HEADERS = [
     'news_title',
     'news_summary',
     'news_time',
-    'news_link',
+    'news_link'
 ]
