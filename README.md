@@ -1,5 +1,5 @@
 # wuhan2020-api-server
-武汉新型冠状病毒防疫信息收集平台后端([English](english))
+武汉新型冠状病毒防疫信息收集平台后端([English](https://github.com/Elfsong/api-server#english))
 
 ## 快速上手
 ``` bash
