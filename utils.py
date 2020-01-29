@@ -39,6 +39,14 @@ FACTORY_PATH = os.path.join(path_home, "FACTORY.csv")
 CLINIC_PATH = os.path.join(path_home, "CLINIC.csv")
 
 
+HOSPITAL_JSON = os.path.join(path_home, "HOSPITAL.json")
+HOTEL_JSON = os.path.join(path_home, "HOTEL.json")
+LOGISITICAL_JSON = os.path.join(path_home, "LOGISTICAL.json")
+NEWS_JSON = os.path.join(path_home, "NEWS.json")
+DONATION_JSON = os.path.join(path_home, "DONATION.json")
+FACTORY_JSON = os.path.join(path_home, "FACTORY.json")
+CLINIC_JSON = os.path.join(path_home, "CLINIC.json")
+
 """
 Tools
 """
@@ -188,6 +196,119 @@ def clinic_list():
     }
     try:
         resp_data = csv_helper(CLINIC_PATH,CLINIC_HEADERS)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+@data.route('/hospital_list_json')
+def hospital_list_json():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data= json_helper(HOSPITAL_JSON)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+
+
+
+@data.route('/hotel_list_json')
+def hotel_list_json():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = json_helper(HOTEL_JSON)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+@data.route('/logstics_list_json')
+def logstics_list_json():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = json_helper(LOGISITICAL_JSON)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+
+
+@data.route('/news_list_json')
+def news_list_json():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = json_helper(NEWS_JSON)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+
+@data.route('/donation_list_json')
+def donation_list_json():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = json_helper(DONATION_JSON)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+
+@data.route('/factory_list_json')
+def factory_list_json():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = json_helper(FACTORY_JSON)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+
+@data.route('/clinic_list_json')
+def clinic_list_json():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = json_helper(CLINIC_JSON)
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
