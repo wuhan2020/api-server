@@ -5,7 +5,7 @@ from flask import make_response
 logger = logging.getLogger(__file__)
 
 
-def auth_token_wapper(token):
+def auth_token_wrapper(token):
     def _handler(func):
         @functools.wraps(func)
         def wrapper(request, *args, **kwargs):
