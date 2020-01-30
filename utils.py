@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint
+from flask import Blueprint,request
 import os
 import json
 import datetime
@@ -68,8 +68,32 @@ def hospital_list():
         resp['msg'] = str(e)
     return json.dumps(resp, ensure_ascii=False)
 
-
-
+@data.route('/hospitals')
+def hospitals():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        hosptials_data = csv_helper(HOSPITAL_PATH,HOTEL_HEADERS)
+        if 'limit' in request.args or 'skip' in request.args:
+            skip = request.args.get('skip', type=int)
+            limit = request.args.get('limit', type=int)
+            hosptials_data_len = len(hosptials_data)
+            if skip < 0 or limit < 0 or limit > 50:
+                raise Exception('Bad input parameter.')
+            if skip > hosptials_data_len:
+                raise Exception("Index out of range.")
+            if skip + limit > hosptials_data_len:
+                limit = hosptials_data_len - skip
+            resp['data'] = hosptials_data[skip:skip+limit]
+        else:
+            resp['data'] = hosptials_data
+        resp['success'] = True
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False),(400 if not resp['success'] else 200)
 
 @data.route('/hotel_list')
 def hotel_list():
