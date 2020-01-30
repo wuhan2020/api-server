@@ -71,7 +71,7 @@ if __name__ == '__main__':
 ```
 
 ## 前端项目issues
-https://github.com/wuhan2020/front-pages/issues
+https://github.com/wuhan2020/WebApp/issues
 
 <h2 id="english"> wuhan2020-api-server </h2>
 The Information Collection Backend for Wuhan 2019-nCoV epidemic prevention
