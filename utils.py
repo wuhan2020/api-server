@@ -9,6 +9,10 @@ import os
 import traceback
 import yaml
 
+import xmltodict
+
+import json
+
 from const import *
 
 data = Blueprint('register', __name__)
@@ -35,6 +39,14 @@ FACTORY_PATH = os.path.join(path_home, "FACTORY.csv")
 CLINIC_PATH = os.path.join(path_home, "CLINIC.csv")
 
 
+HOSPITAL_JSON = os.path.join(path_home, "HOSPITAL.json")
+HOTEL_JSON = os.path.join(path_home, "HOTEL.json")
+LOGISTICS_JSON = os.path.join(path_home, "LOGISTICS.json")
+NEWS_JSON = os.path.join(path_home, "NEWS.json")
+DONATION_JSON = os.path.join(path_home, "DONATION.json")
+FACTORY_JSON = os.path.join(path_home, "FACTORY.json")
+CLINIC_JSON = os.path.join(path_home, "CLINIC.json")
+
 """
 Tools
 """
@@ -51,6 +63,30 @@ def yaml_helper(fpath):
     with open(fpath, 'r') as f:
         result = yaml.load(f)
     return result
+
+
+def xml_helper(xml_path):
+    with open(xml_path, 'r') as f:
+        xml_str = f.read()
+    json = xmltodict.parse(xml_str)
+    return json
+
+
+def json_helper(json_path):
+    with open(json_path, 'r', encoding='UTF-8') as f:
+        return json.loads(f.read())
+
+
+@data.route('/json_test')
+def json_test():
+    path = os.path.join("/root/api-server/", "test.json")
+    return json_helper(path)
+
+
+@data.route('/xml_test')
+def xml_test():
+    path = os.path.join("/root/api-server/", "test.xml")
+    return xml_helper(path)
 
 
 @data.route('/hospital_list')
@@ -184,6 +220,119 @@ def clinic_list():
     }
     try:
         resp_data = csv_helper(CLINIC_PATH, CLINIC_HEADERS)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+@data.route('/hospital_list_json')
+def hospital_list_json():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data= json_helper(HOSPITAL_JSON)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+
+
+
+@data.route('/hotel_list_json')
+def hotel_list_json():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = json_helper(HOTEL_JSON)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+@data.route('/logstics_list_json')
+def logstics_list_json():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = json_helper(LOGISTICS_JSON)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+
+
+@data.route('/news_list_json')
+def news_list_json():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = json_helper(NEWS_JSON)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+
+@data.route('/donation_list_json')
+def donation_list_json():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = json_helper(DONATION_JSON)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+
+@data.route('/factory_list_json')
+def factory_list_json():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = json_helper(FACTORY_JSON)
+        resp['success'] = True
+        resp['data'] = resp_data
+    except Exception as e:
+        resp['msg'] = str(e)
+    return json.dumps(resp, ensure_ascii=False)
+
+
+@data.route('/clinic_list_json')
+def clinic_list_json():
+    resp = {
+        'success': False,
+        'data': [],
+        'msg': '',
+    }
+    try:
+        resp_data = json_helper(CLINIC_JSON)
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
