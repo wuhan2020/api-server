@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint,request
+from flask import Blueprint, current_app, request
 import os
 import json
 import datetime
@@ -8,73 +8,13 @@ import csv
 import os
 import traceback
 import yaml
-
 import xmltodict
-
 import json
 
 from const import *
+from tools import *
 
 data = Blueprint('register', __name__)
-if platform.system()=="Linux":
-    path_home="./wuhan2020"
-else:
-    from index import app
-    path_home=os.path.join(app.root_path,"wuhan2020")
-# wuhan2020文件夹为https://github.com/wuhan2020/wuhan2020项目文件的本地clone
-# 阿里云serverless使用挂载nas远程目录来存放缓存文件；在本机调试时，缓存文件夹将存放在项目根目录
-
-if not os.path.exists(path_home):
-    os.mkdir(path_home)
-    
-"""
-CACHE PATH
-"""
-HOSPITAL_PATH = os.path.join(path_home, "HOSPITAL.csv")
-HOTEL_PATH = os.path.join(path_home, "HOTEL.csv")
-LOGISTICS_PATH = os.path.join(path_home, "LOGISTICS.csv")
-NEWS_PATH = os.path.join(path_home, "NEWS.csv")
-DONATION_PATH = os.path.join(path_home, "DONATION.csv")
-FACTORY_PATH = os.path.join(path_home, "FACTORY.csv")
-CLINIC_PATH = os.path.join(path_home, "CLINIC.csv")
-
-
-HOSPITAL_JSON = os.path.join(path_home, "HOSPITAL.json")
-HOTEL_JSON = os.path.join(path_home, "HOTEL.json")
-LOGISTICS_JSON = os.path.join(path_home, "LOGISTICS.json")
-NEWS_JSON = os.path.join(path_home, "NEWS.json")
-DONATION_JSON = os.path.join(path_home, "DONATION.json")
-FACTORY_JSON = os.path.join(path_home, "FACTORY.json")
-CLINIC_JSON = os.path.join(path_home, "CLINIC.json")
-
-"""
-Tools
-"""
-def csv_helper(fpath, headers):
-    result = []
-    with open(fpath) as f:
-        for line in f.readlines()[1:]:
-            csv_data = line.strip().split(",")
-            result.append(dict(zip(headers,csv_data)))
-    return result
-
-def yaml_helper(fpath):
-    result = []
-    with open(fpath, 'r') as f:
-        result = yaml.load(f)
-    return result
-
-
-def xml_helper(xml_path):
-    with open(xml_path, 'r') as f:
-        xml_str = f.read()
-    json = xmltodict.parse(xml_str)
-    return json
-
-
-def json_helper(json_path):
-    with open(json_path, 'r', encoding='UTF-8') as f:
-        return json.loads(f.read())
 
 
 @data.route('/json_test')
@@ -97,22 +37,7 @@ def hospital_list():
         'msg': '',
     }
     try:
-        resp_data = csv_helper(HOSPITAL_PATH,HOTEL_HEADERS)
-        resp['success'] = True
-        resp['data'] = resp_data
-    except Exception as e:
-        resp['msg'] = str(e)
-    return json.dumps(resp, ensure_ascii=False)
-
-@data.route('/hospitals')
-def hospitals():
-    resp = {
-        'success': False,
-        'data': [],
-        'msg': '',
-    }
-    try:
-        hosptials_data = csv_helper(HOSPITAL_PATH,HOTEL_HEADERS)
+        hosptials_data = csv_with_medical_supplier(current_app.config['HOSPITAL_PATH'], HOSPITAL_HEADERS)
         if 'limit' in request.args or 'skip' in request.args:
             skip = request.args.get('skip', type=int)
             limit = request.args.get('limit', type=int)
@@ -131,7 +56,9 @@ def hospitals():
         resp['msg'] = str(e)
     return json.dumps(resp, ensure_ascii=False),(400 if not resp['success'] else 200)
 
+
 @data.route('/hotel_list')
+@auth.login_required
 def hotel_list():
     resp = {
         'success': False,
@@ -139,22 +66,24 @@ def hotel_list():
         'msg': '',
     }
     try:
-        resp_data = csv_helper(HOTEL_PATH, HOTEL_HEADERS)
+        resp_data = csv_helper(current_app.config['HOTEL_PATH'], HOTEL_HEADERS)
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
         resp['msg'] = str(e)
     return json.dumps(resp, ensure_ascii=False)
 
-@data.route('/logistics_list')
-def logstics_list():
+
+@data.route('/logistical_list')
+@auth.login_required
+def logistical_list():
     resp = {
         'success': False,
         'data': [],
         'msg': '',
     }
     try:
-        resp_data = csv_helper(LOGISTICS_PATH, LOGISTICS_HEADERS)
+        resp_data = csv_with_medical_supplier(current_app.config['LOGISITICAL_PATH'], LOGISTICS_HEADERS)
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
@@ -162,8 +91,8 @@ def logstics_list():
     return json.dumps(resp, ensure_ascii=False)
 
 
-
 @data.route('/news_list')
+@auth.login_required
 def news_list():
     resp = {
         'success': False,
@@ -171,7 +100,7 @@ def news_list():
         'msg': '',
     }
     try:
-        resp_data = csv_helper(NEWS_PATH, NEWS_HEADERS)
+        resp_data = csv_helper(current_app.config['NEWS_PATH'], NEWS_HEADERS)
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
@@ -180,6 +109,7 @@ def news_list():
 
 
 @data.route('/donation_list')
+@auth.login_required
 def donation_list():
     resp = {
         'success': False,
@@ -187,7 +117,7 @@ def donation_list():
         'msg': '',
     }
     try:
-        resp_data = csv_helper(DONATION_PATH, DONATION_HEADERS)
+        resp_data = csv_helper(current_app.config['DONATION_PATH'], DONATION_HEADERS)
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
@@ -196,6 +126,7 @@ def donation_list():
 
 
 @data.route('/factory_list')
+@auth.login_required
 def factory_list():
     resp = {
         'success': False,
@@ -203,7 +134,7 @@ def factory_list():
         'msg': '',
     }
     try:
-        resp_data = csv_helper(FACTORY_PATH, FACTORY_HEADERS)
+        resp_data = csv_with_medical_supplier(current_app.config['FACTORY_PATH'], FACTORY_HEADERS)
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
@@ -212,6 +143,7 @@ def factory_list():
 
 
 @data.route('/clinic_list')
+@auth.login_required
 def clinic_list():
     resp = {
         'success': False,
@@ -219,7 +151,7 @@ def clinic_list():
         'msg': '',
     }
     try:
-        resp_data = csv_helper(CLINIC_PATH, CLINIC_HEADERS)
+        resp_data = csv_helper(current_app.config['CLINIC_PATH'], CLINIC_HEADERS)
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
@@ -234,7 +166,7 @@ def hospital_list_json():
         'msg': '',
     }
     try:
-        resp_data= json_helper(HOSPITAL_JSON)
+        resp_data= json_helper(current_app.config['JSON_HOSPITAL_PATH'])
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
@@ -252,12 +184,13 @@ def hotel_list_json():
         'msg': '',
     }
     try:
-        resp_data = json_helper(HOTEL_JSON)
+        resp_data = json_helper(current_app.config['JSON_HOTEL_PATH'])
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
         resp['msg'] = str(e)
     return json.dumps(resp, ensure_ascii=False)
+
 
 @data.route('/logstics_list_json')
 def logstics_list_json():
@@ -267,13 +200,12 @@ def logstics_list_json():
         'msg': '',
     }
     try:
-        resp_data = json_helper(LOGISTICS_JSON)
+        resp_data = json_helper(current_app.config['JSON_LOGISITICAL_PATH'])
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
         resp['msg'] = str(e)
     return json.dumps(resp, ensure_ascii=False)
-
 
 
 @data.route('/news_list_json')
@@ -284,7 +216,7 @@ def news_list_json():
         'msg': '',
     }
     try:
-        resp_data = json_helper(NEWS_JSON)
+        resp_data = json_helper(current_app.config['JSON_NEWS_PATH'])
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
@@ -300,7 +232,7 @@ def donation_list_json():
         'msg': '',
     }
     try:
-        resp_data = json_helper(DONATION_JSON)
+        resp_data = json_helper(current_app.config['JSON_DONATION_PATH'])
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
@@ -316,7 +248,7 @@ def factory_list_json():
         'msg': '',
     }
     try:
-        resp_data = json_helper(FACTORY_JSON)
+        resp_data = json_helper(current_app.config['JSON_FACTORY_PATH'])
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
@@ -332,7 +264,7 @@ def clinic_list_json():
         'msg': '',
     }
     try:
-        resp_data = json_helper(CLINIC_JSON)
+        resp_data = json_helper(current_app.config['JSON_CLINIC_PATH'])
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
