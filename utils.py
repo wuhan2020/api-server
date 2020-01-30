@@ -28,7 +28,7 @@ CACHE PATH
 """
 HOSPITAL_PATH = os.path.join(path_home, "HOSPITAL.csv")
 HOTEL_PATH = os.path.join(path_home, "HOTEL.csv")
-LOGISITICAL_PATH = os.path.join(path_home, "LOGISTICAL.csv")
+LOGISTICS_PATH = os.path.join(path_home, "LOGISTICS.csv")
 NEWS_PATH = os.path.join(path_home, "NEWS.csv")
 DONATION_PATH = os.path.join(path_home, "DONATION.csv")
 FACTORY_PATH = os.path.join(path_home, "FACTORY.csv")
@@ -86,7 +86,7 @@ def hotel_list():
         resp['msg'] = str(e)
     return json.dumps(resp, ensure_ascii=False)
 
-@data.route('/logstics_list')
+@data.route('/logistics_list')
 def logstics_list():
     resp = {
         'success': False,
@@ -94,7 +94,7 @@ def logstics_list():
         'msg': '',
     }
     try:
-        resp_data = csv_helper(LOGISITICAL_PATH,LOGISTICS_HEADERS )
+        resp_data = csv_helper(LOGISTICS_PATH, LOGISTICS_HEADERS)
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
@@ -159,7 +159,7 @@ def clinic_list():
         'msg': '',
     }
     try:
-        resp_data = csv_helper(CLINIC_PATH,CLINIC_HEADERS)
+        resp_data = csv_helper(CLINIC_PATH, CLINIC_HEADERS)
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
