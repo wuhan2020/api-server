@@ -13,7 +13,7 @@ from const import *
 
 data = Blueprint('register', __name__)
 if platform.system()=="Linux":
-    path_home="/home/wuhan2020/wuhan2020"
+    path_home="./wuhan2020"
 else:
     from index import app
     path_home=os.path.join(app.root_path,"wuhan2020")
