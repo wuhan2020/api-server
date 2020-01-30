@@ -42,3 +42,4 @@ NEWS_HEADERS = [
     'news_time',
     'news_link'
 ]
+HOSPITAL_HEADERS =[]

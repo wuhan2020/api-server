@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint,request
+from flask import Blueprint, request
+from werkzeug.exceptions import *
 import os
 import json
 import datetime
@@ -16,17 +17,17 @@ import json
 from const import *
 
 data = Blueprint('register', __name__)
-if platform.system()=="Linux":
-    path_home="./wuhan2020"
+if platform.system() == "Linux":
+    path_home = "./wuhan2020"
 else:
     from index import app
-    path_home=os.path.join(app.root_path,"wuhan2020")
-# wuhan2020文件夹为https://github.com/wuhan2020/wuhan2020项目文件的本地clone
+    path_home = os.path.join(app.root_path, "wuhan2020")
+# wuhan2020文件夹为 https://github.com/wuhan2020/wuhan2020 项目文件的本地clone
 # 阿里云serverless使用挂载nas远程目录来存放缓存文件；在本机调试时，缓存文件夹将存放在项目根目录
 
 if not os.path.exists(path_home):
     os.mkdir(path_home)
-    
+
 """
 CACHE PATH
 """
@@ -50,13 +51,16 @@ CLINIC_JSON = os.path.join(path_home, "CLINIC.json")
 """
 Tools
 """
+
+
 def csv_helper(fpath, headers):
     result = []
     with open(fpath) as f:
         for line in f.readlines()[1:]:
             csv_data = line.strip().split(",")
-            result.append(dict(zip(headers,csv_data)))
+            result.append(dict(zip(headers, csv_data)))
     return result
+
 
 def yaml_helper(fpath):
     result = []
@@ -77,19 +81,19 @@ def json_helper(json_path):
         return json.loads(f.read())
 
 
-@data.route('/json_test')
+@data.route('/json_test', methods=['GET'])
 def json_test():
     path = os.path.join("/root/api-server/", "test.json")
     return json_helper(path)
 
 
-@data.route('/xml_test')
+@data.route('/xml_test', methods=['GET'])
 def xml_test():
     path = os.path.join("/root/api-server/", "test.xml")
     return xml_helper(path)
 
 
-@data.route('/hospital_list')
+@data.route('/hospital_list', methods=['GET'])
 def hospital_list():
     resp = {
         'success': False,
@@ -97,41 +101,49 @@ def hospital_list():
         'msg': '',
     }
     try:
-        resp_data = csv_helper(HOSPITAL_PATH,HOTEL_HEADERS)
+        resp_data = csv_helper(HOSPITAL_PATH, HOTEL_HEADERS)
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
         resp['msg'] = str(e)
     return json.dumps(resp, ensure_ascii=False)
 
-@data.route('/hospitals')
+
+@data.route('/hospitals', methods=['GET'])
 def hospitals():
     resp = {
         'success': False,
         'data': [],
         'msg': '',
     }
+    code = 200
     try:
-        hosptials_data = csv_helper(HOSPITAL_PATH,HOTEL_HEADERS)
+        hosptials_data = csv_helper(HOSPITAL_PATH, HOSPITAL_HEADERS)
         if 'limit' in request.args or 'skip' in request.args:
             skip = request.args.get('skip', type=int)
             limit = request.args.get('limit', type=int)
             hosptials_data_len = len(hosptials_data)
             if skip < 0 or limit < 0 or limit > 50:
-                raise Exception('Bad input parameter.')
+                raise BadRequest('Bad input parameter.')
             if skip > hosptials_data_len:
-                raise Exception("Index out of range.")
+                raise BadRequest("Index out of range.")
             if skip + limit > hosptials_data_len:
                 limit = hosptials_data_len - skip
             resp['data'] = hosptials_data[skip:skip+limit]
         else:
             resp['data'] = hosptials_data
         resp['success'] = True
-    except Exception as e:
+    except HTTPException as e:
+        code = e.code
         resp['msg'] = str(e)
-    return json.dumps(resp, ensure_ascii=False),(400 if not resp['success'] else 200)
+    except Exception as ex:
+        code = 500
+        resp['msg'] = str(ex)
 
-@data.route('/hotel_list')
+    return json.dumps(resp, ensure_ascii=False), code
+
+
+@data.route('/hotel_list', methods=['GET'])
 def hotel_list():
     resp = {
         'success': False,
@@ -146,8 +158,9 @@ def hotel_list():
         resp['msg'] = str(e)
     return json.dumps(resp, ensure_ascii=False)
 
-@data.route('/logistics_list')
-def logstics_list():
+
+@data.route('/logistics_list', methods=['GET'])
+def logistics_list():
     resp = {
         'success': False,
         'data': [],
@@ -162,8 +175,7 @@ def logstics_list():
     return json.dumps(resp, ensure_ascii=False)
 
 
-
-@data.route('/news_list')
+@data.route('/news_list', methods=['GET'])
 def news_list():
     resp = {
         'success': False,
@@ -179,7 +191,7 @@ def news_list():
     return json.dumps(resp, ensure_ascii=False)
 
 
-@data.route('/donation_list')
+@data.route('/donation_list', methods=['GET'])
 def donation_list():
     resp = {
         'success': False,
@@ -195,7 +207,7 @@ def donation_list():
     return json.dumps(resp, ensure_ascii=False)
 
 
-@data.route('/factory_list')
+@data.route('/factory_list', methods=['GET'])
 def factory_list():
     resp = {
         'success': False,
@@ -211,7 +223,7 @@ def factory_list():
     return json.dumps(resp, ensure_ascii=False)
 
 
-@data.route('/clinic_list')
+@data.route('/clinic_list', methods=['GET'])
 def clinic_list():
     resp = {
         'success': False,
@@ -226,7 +238,8 @@ def clinic_list():
         resp['msg'] = str(e)
     return json.dumps(resp, ensure_ascii=False)
 
-@data.route('/hospital_list_json')
+
+@data.route('/hospital_list_json', methods=['GET'])
 def hospital_list_json():
     resp = {
         'success': False,
@@ -234,7 +247,7 @@ def hospital_list_json():
         'msg': '',
     }
     try:
-        resp_data= json_helper(HOSPITAL_JSON)
+        resp_data = json_helper(HOSPITAL_JSON)
         resp['success'] = True
         resp['data'] = resp_data
     except Exception as e:
@@ -242,9 +255,7 @@ def hospital_list_json():
     return json.dumps(resp, ensure_ascii=False)
 
 
-
-
-@data.route('/hotel_list_json')
+@data.route('/hotel_list_json', methods=['GET'])
 def hotel_list_json():
     resp = {
         'success': False,
@@ -259,8 +270,9 @@ def hotel_list_json():
         resp['msg'] = str(e)
     return json.dumps(resp, ensure_ascii=False)
 
-@data.route('/logstics_list_json')
-def logstics_list_json():
+
+@data.route('/logistics_list_json', methods=['GET'])
+def logistics_list_json():
     resp = {
         'success': False,
         'data': [],
@@ -275,8 +287,7 @@ def logstics_list_json():
     return json.dumps(resp, ensure_ascii=False)
 
 
-
-@data.route('/news_list_json')
+@data.route('/news_list_json', methods=['GET'])
 def news_list_json():
     resp = {
         'success': False,
@@ -292,7 +303,7 @@ def news_list_json():
     return json.dumps(resp, ensure_ascii=False)
 
 
-@data.route('/donation_list_json')
+@data.route('/donation_list_json', methods=['GET'])
 def donation_list_json():
     resp = {
         'success': False,
@@ -308,7 +319,7 @@ def donation_list_json():
     return json.dumps(resp, ensure_ascii=False)
 
 
-@data.route('/factory_list_json')
+@data.route('/factory_list_json', methods=['GET'])
 def factory_list_json():
     resp = {
         'success': False,
@@ -324,7 +335,7 @@ def factory_list_json():
     return json.dumps(resp, ensure_ascii=False)
 
 
-@data.route('/clinic_list_json')
+@data.route('/clinic_list_json', methods=['GET'])
 def clinic_list_json():
     resp = {
         'success': False,
