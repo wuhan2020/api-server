@@ -1,5 +1,5 @@
 # Align with the CI/CD YML
-FROM python:2.7
+FROM python:3.8-alpine
 
 # Setup workdir
 WORKDIR /api-server
