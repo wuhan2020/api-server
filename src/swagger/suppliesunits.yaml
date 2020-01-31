@@ -1,0 +1,180 @@
+openapi: 3.0.2
+info:
+  description: This API provides Supplies list
+  version: 0.2.0
+  title: Supplies Units List API
+  contact:
+    email: wuhan2020@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: contributors
+    description: Secured write permission calls
+  - name: developers
+    description: Operations available to regular developers
+paths:
+  /suppliesunits:
+    get:
+      tags:
+        - developers
+      summary: searches supplies units
+      operationId: searchSuppliesUnits
+      description: |
+        By passing in the appropriate options, you can search for
+        available supplies units in the system
+      parameters:
+        - in: query
+          name: searchString
+          description: pass an optional search string for looking up inventory
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: skip
+          description: number of records to skip for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplyItemUnit'
+        '400':
+          description: bad input parameter
+    post:
+      tags:
+        - contributors
+      summary: adds a supply item
+      operationId: addSupply
+      description: Adds an item to the system
+      responses:
+        '201':
+          description: item created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: an existing item already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyItemUnit'
+        description: Supply item to add
+servers:
+  - url: 'https://virtserver.swaggerhub.com/wuhan2020/suppliesunits/0.2.0'
+components:
+  schemas:
+    SupplyItemUnit:
+      type: object
+      required:
+        - id
+        - name
+        - unitamount
+        - volume
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: 箱
+        unitamount:
+          type: integer
+          format: int32
+          example: 250
+        desc:
+          type: string
+          example: 1箱口罩250个
+        volume: 
+          type: object
+          required:
+            - length
+            - height
+            - width
+          properties:
+            length:
+              $ref: '#/components/schemas/Length'
+            height:
+              $ref: '#/components/schemas/Length'
+            width:
+              $ref: '#/components/schemas/Length'
+        weight:
+          $ref: '#/components/schemas/Weight'
+        releaseDate:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+    Unit:
+      oneOf:
+        - $ref: '#/components/schemas/Length'
+        - $ref: '#/components/schemas/Size'
+        - $ref: '#/components/schemas/Weight'
+        - $ref: '#/components/schemas/Volume'
+    Size:
+      type: object
+      required:
+        - amount
+        - unit
+      properties:
+        amount: 
+          type: integer
+          format: int32
+        unit:
+          type: string
+          enum: ['#']
+          description: 号
+    Length:      
+      type: object
+      required:
+        - amount
+        - unit
+      properties:
+        amount: 
+          type: number
+          format: float
+        unit:
+          type: string
+          enum: [CM, M]
+          description: 米, 厘米
+    Weight:
+      type: object
+      required:
+        - amount
+        - unit
+      properties:
+        amount: 
+          type: number
+          format: float
+        unit:
+          type: string
+          enum: [g, kg, ton]
+          description: 克, 千克, 吨
+    Volume:
+      type: object
+      required:
+        - amount
+        - unit
+      properties:
+        amount: 
+          type: number
+          format: float
+        unit:
+          type: string
+          enum: [ml, L]
+          description: 毫升,升

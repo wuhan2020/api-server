@@ -1,0 +1,153 @@
+openapi: 3.0.2
+info:
+  description: This is Hostpital Demands API
+
+  version: 0.2.0
+
+  title: Hostpital Demands API
+  # put the contact info for your development or API team
+  contact:
+    email: wuhan2020@inrganizing operations
+tags:
+- name: contributors
+  description: Secured write permission calls
+- name: developers
+  description: Operations available to regular developers
+
+paths:
+  /hospitaldemands:
+    get:
+      tags:
+      - developers
+      summary: searches hospital demands
+      operationId: searchHospitalDemands
+      description: |
+        By passing in the appropriate options, you can search for
+        recorded hospital demands in the system
+      parameters:
+        - in: query
+          name: searchString
+          description: pass an optional search string for looking up hospital demands
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: skip
+          description: number of records to skip for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HospitalDemandItem'
+      
+        '400':
+          description: bad input parameter
+    post:
+      tags:
+      - contributors
+      summary: adds an hospital demands item
+      operationId: addHospitalDemands
+      description: Adds an item to the system
+      responses:
+        '201':
+          description: item created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: an existing item already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HospitalDemandItem'
+        description: Hospital Demands item to add
+    put:
+      tags:
+      - contributors
+      summary: suspend an hospital demands item
+      operationId: suspendHospitalDemands
+      description: suspend an item to the system
+      responses:
+        '201':
+          description: item suspended
+        '400':
+          description: 'invalid input, object invalid'
+        '403':
+          description: 'forbidden'
+        '404':
+          description: 'not found'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'validations.yaml#/components/schemas/SuspendItem'
+        description: Hospital Demands item to suspend 取消医院需求item        
+
+servers:
+  - url: 'https://virtserver.swaggerhub.com/wuhan2020/hospitaldemands/0.2.0'
+components:
+  schemas:
+    HospitalDemandItem:
+      type: object
+      required:
+      - hospitDevelopal      
+      - demands
+      - contact
+      - releaseDate
+      - validation
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        hospital:
+          $ref: 'hospitals.yaml#/components/schemas/HospitalItem'
+
+        validation:
+          $ref: 'validations.yaml#/components/schemas/ValidationItem'
+        releaseDate:
+          type: string
+          format: date-time
+          example: 2016-08-29T09:12:33.001Z
+        contact:
+          $ref: 'validations.yaml#/components/schemas/Contact'
+        demands:
+          type: array
+          items:
+              type: object
+              required:
+              - supply
+              properties:
+                supply:
+                  $ref: 'supplies.yaml#/components/schemas/SupplyItem'
+                amount:
+                  oneOf:
+                    - type: integer
+                      format: int32
+                      description: 个
+                    - $ref: 'suppliesunits.yaml#/components/schemas/SupplyItemUnit'
+                    - $ref: 'suppliesunits.yaml#/components/schemas/Unit'
+                remark:
+                  type: string
+                  example: 需符合或高于下列国家标准,医用一次性防护服技术要求
+        availableState:
+          oneOf:
+          - type: boolean
+            default: true
+          - $ref: 'validations.yaml#/components/schemas/SuspendItem'

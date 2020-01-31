@@ -1,0 +1,181 @@
+openapi: 3.0.2
+info:
+  description: This API provides Hotel/motel/ Accomodation list
+  version: 0.1.0
+  title: Accomodation List API
+  contact:
+    email: wuhan2020@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: contributors
+    description: Secured write permission calls
+  - name: developers
+    description: Operations available to regular developers
+paths:
+  /acomodations:
+    get:
+      tags:
+        - developers
+      summary: searches accomodations
+      operationId: searchAccomodations
+      description: |
+        By passing in the appropriate options, you can search for
+        available accomodations in the system
+      parameters:
+        - in: query
+          name: searchString
+          description: pass an optional search string for looking up accomodations
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: skip
+          description: number of records to skip for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccomodationItem'
+        '400':
+          description: bad input parameter
+    post:
+      tags:
+        - contributors
+      summary: adds am accomodation item
+      operationId: addAccomodation
+      description: Adds an item to the system
+      responses:
+        '201':
+          description: item created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: an existing item already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccomodationItem'
+        description: Accomodation item to add
+    put:
+      tags:
+      - contributors
+      summary: suspend am accomodation item
+      operationId: suspendAccomodation
+      description: suspend an item to the system
+      responses:
+        '201':
+          description: item suspended
+        '400':
+          description: 'invalid input, object invalid'
+        '403':
+          description: 'forbidden'
+        '404':
+          description: 'not found'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'validations.yaml#/components/schemas/SuspendItem'
+servers:
+  - url: 'https://virtserver.swaggerhub.com/wuhan2020/accomodations/0.1.0'
+components:
+  schemas:
+    AccomodationItem:
+      type: object
+      required:
+        - id
+        - name
+        - address
+        - volume
+        - supporttype
+        - contact
+        - validation
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: 第一大酒店
+        address:
+          type: string
+          example: 湖北省武汉市靖江大街12号 第一大酒店
+        supporttype:
+          type: string
+          enum: ['医护人员','运输司机','需隔离观察人员','支援人员','外出滞留人员']
+        contact:
+          $ref: 'validations.yaml#/components/schemas/Contact'
+        validation:
+          $ref: 'validations.yaml#/components/schemas/ValidationItem'
+        volume:
+          type: object
+          required:
+            - totalPpl         
+          properties:
+            totalPpl:
+              type: integer
+              format: int32
+              example: 55
+              description: 共可接纳55人
+            rooms:
+              type: array
+              items:
+                type: object
+                required:
+                  - number
+                  - room
+                properties:
+                  number:
+                    type: integer
+                    format: int32
+                    example: 5
+                    description: 5间
+                  room:  
+                    $ref: '#/components/schemas/AccomodationRoom'
+        releaseDate:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        availableState:
+          oneOf:
+          - type: boolean
+            default: true
+          - $ref: 'validations.yaml#/components/schemas/SuspendItem'
+    AccomodationRoom:
+      type: object
+      required:
+        - ppl
+      properties:
+        ppl:
+          type: integer
+          format: int32
+          example: 2
+          description: 2个人 
+        space:
+          type: number
+          format: float
+          example: 5.2
+          description: 5.2 平方米
+        roomtype:
+          type: string
+          enum: ['双人间','多人间','标准间','套房','豪华套房','总统套房']

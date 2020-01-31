@@ -1,0 +1,107 @@
+openapi: 3.0.2
+info:
+  description: This is a hospital API
+  version: 0.2.1
+  title: Hospital List API
+  contact:
+    email: wuhan2020@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: contributors
+    description: Secured write permission calls
+  - name: developers
+    description: Operations available to regular developers
+paths:
+  /hospitals:
+    get:
+      tags:
+        - developers
+      summary: searches hospitals
+      operationId: searchHospital
+      description: |
+        By passing in the appropriate options, you can search for
+        recorded hospitals in the system
+      parameters:
+        - in: query
+          name: searchString
+          description: pass an optional search string for looking up hospital
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: skip
+          description: number of records to skip for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HospitalItem'
+        '400':
+          description: bad input parameter
+    post:
+      tags:
+        - contributors
+      summary: adds an hospital item
+      operationId: addHospital
+      description: Adds an item to the system
+      responses:
+        '201':
+          description: item created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: an existing item already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HospitalItem'
+        description: Hospital item to add
+servers:
+  - url: 'https://virtserver.swaggerhub.com/wuhan2020/hospitals/0.2.1'
+components:
+  schemas:
+    HospitalItem:
+      type: object
+      required:
+        - id
+        - name
+        - city
+        - address
+        - releaseDate
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: 武汉第一人民医院
+        city:
+          type: string
+          example: 武汉市
+        address:
+          type: string
+          example: 湖北省武汉市东湖路169号 武汉大学中南医院
+        releaseDate:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
