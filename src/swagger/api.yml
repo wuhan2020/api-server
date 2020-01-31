@@ -1,0 +1,150 @@
+openapi: 3.0.2
+info:
+  title: Wuhan2020 API service
+  description: This is the API service of the Wuhan2020 project, which aims at collecting all useful information to help people fight against the 2019-nCoV outbreak, check the developer website for more info
+  version: 0.1.0
+  contact:
+    name: "Github Repo"
+    url: https://github.com/wuhan2020/api-server
+
+# Let's version the APIs a bit later
+# servers:
+#   - url: /api/v1
+
+tags:
+  - name: Accommodation
+    description: Search for available accommodations
+
+paths:
+  /acomodations:
+    get:
+      tags:
+        - Accommodation
+      summary: Search for all available accommodations
+      operationId: src.api.accommodations.get
+      description: |
+        By passing in the appropriate options, 
+        you can search for all available accommodations
+        in the system
+      parameters:
+        - in: query
+          name: name
+          description: Name of the accommodation.
+          required: false
+          schema:
+            type: string
+
+        - in: query
+          name: skip
+          description: Number of records to skip for pagination.
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+
+        - in: query
+          name: limit
+          description: Max number of results to return per page.
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        200:
+          description: All results retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccommodationItem'
+        400:
+          description: Bad input parameter
+
+components:
+  schemas:
+    AccommodationItem:
+      type: object
+      required:
+        - id
+        - name
+        - address
+        - volume
+        - supporttype
+        - contact
+        - validation
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: 第一大酒店
+        address:
+          type: string
+          example: 湖北省武汉市靖江大街12号 第一大酒店
+        supporttype:
+          type: string
+          enum: ['医护人员', '运输司机', '需隔离观察人员', '支援人员', '外出滞留人员']
+        contact:
+          $ref: 'validations.yaml#/components/schemas/Contact'
+        validation:
+          $ref: 'validations.yaml#/components/schemas/ValidationItem'
+        volume:
+          type: object
+          required:
+            - totalPpl         
+          properties:
+            maxCapacity:
+              type: integer
+              format: int32
+              example: 55
+              description: 共可接纳55人
+            rooms:
+              type: array
+              items:
+                type: object
+                required:
+                  - number
+                  - room
+                properties:
+                  number:
+                    type: integer
+                    format: int32
+                    example: 5
+                    description: 5间
+                  room:  
+                    $ref: '#/components/schemas/AccomodationRoom'
+        releaseDate:
+          type: string
+          format: date-time
+          example: '2020-01-01T09:12:33.001Z'
+        availableState:
+          oneOf:
+          - type: boolean
+            default: true
+          - $ref: 'validations.yaml#/components/schemas/SuspendItem'
+    AccomodationRoom:
+      type: object
+      required:
+        - capacity
+      properties:
+        number:
+          type: string
+          example: 401号房
+          description: 房间名为401号房
+        capacity:
+          type: integer
+          format: int32
+          example: 2
+          description: 可容纳2个人 
+        space:
+          type: number
+          format: float
+          example: 5.2
+          description: 5.2 平方米
+        roomtype:
+          type: string
+          enum: ['双人间', '多人间', '标准间', '套房', '豪华套房', '总统套房']

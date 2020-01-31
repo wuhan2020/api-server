@@ -1,4 +1,4 @@
-name: Python application
+name: Tests on Pull Requests and Master
 
 on:
   push:
@@ -35,4 +35,4 @@ jobs:
     - name: Test with pytest
       run: |
         pip install pytest
-        pytest test.py
+        pytest -v src/tests
