@@ -1,86 +1,80 @@
-# API Server
+# 简体中文 | [English](./README_EN.md) 
 
-![Python3.6](https://img.shields.io/badge/python-3.6-green.svg?style=flat-square&logo=python&colorB=blue)
-[![Slack Channel](https://img.shields.io/badge/Slack%20Channel-%23api--server-green.svg?style=flat-square&colorB=blue)](https://app.slack.com/client/TT5U1VCPQ/CT3V5CDKJ)
-[![Built with love](https://img.shields.io/badge/BUILT%20WITH-LOVE-orange?style=flat-square)](https://img.shields.io/badge/BUILT%20WITH-LOVE-orange?style=flat-square&logo=love)
-![Build Status](https://github.com/wuhan2020/api-server/workflows/Tests%20on%20Pull%20Requests%20and%20Master/badge.svg?branch=master&event=push)
+# wuhan2020-api-server
+武汉新型冠状病毒防疫信息收集平台后端
 
-[中文文档](README-cn.md)
-
-This a backend API service of the voluntary information collection and sharing platform to fight against the 2019-nCoV outbreak in Wuhan and the world. 
-
-The API is designed to be thin and stateless. It relies on the data collected and validated by other sub-projects, transform and expose them through standard RESTful APIs. The service is written in Python and Flask.
-
-## Get Started
-
-Please first clone this repository and the sub-module-repo by:
-
-```
+## 快速上手
+``` bash
 git clone https://github.com/wuhan2020/api-server
 cd api-server
 git clone https://github.com/wuhan2020/wuhan2020
-```
-
-### Running locally with Docker (Recommended)
-
-**Pre-requisite: You have to have [Docker client](https://www.docker.com/products/docker-desktop) installed on your machine.**
-
-#### Build the Docker image
-
-Run:
-```
-docker build -t api-server:default .
-```
-from the root directory of the clone of this repo. Note this step could take a long time dependd on where you are located in.
-
-#### Run built Docker image
-
-Run:
-```
-docker run --name api-server --publish 9000:9000 api-server:default 
-```
-and then open `http://localhost:9000` in your browser. _(Add `-d` to run the Docker container in detach/background mode)_
-
-You should see a Swagger page documents the available endpoints now.
-
-_If you ran into error `The container name "/api-server" is already in use`, please run `docker rm api-server` to delete previous container which has the same name._
-
-#### Stop running Docker container
-
-Run:
-```
-docker stop api-server 
-```
-to stop the running container.
-
-### Running with your own Python environment
-
-Please make sure you have **Python3.6** installed, (ideally you should be using a [VirtualEnv](https://docs.python.org/3.6/tutorial/venv.html)
-or something like [PyEnv](https://github.com/pyenv/pyenv)). Then from the root directory of the cloned repo, run:
-
-```
-pip install -U -r requirements.txt
-```
-
-and then start the server by:
-
-```
+pip install -r requirements.txt
 bash bootstrap
 ```
-now if you open `http://localhost:9000` in your browser, you should see a Swagger page documents the available endpoints.
 
-## Development
+随后便可在 `http://{your-ip}:9000/wuhan2020/{list_path}` 调试 api
 
-Coming soon...
+注意 `list_path` 为 `utils.py` 中被 `@data.route()` 中注册的 `path`, `your-ip` 默认是 `127.0.0.1`.
 
-## Deployment
+## 在 Docker 容器运行
+需要安装[Docker客户端](https://www.docker.com/products/docker-desktop).
 
-Coming soon...
+### 制作 Docker 镜像
+在本项目根目录下执行 `docker build -t api-server:default .`.
 
-## Contributing
+* 注意：国内这一步可能会耗时较长.
 
-Please see [Conntributing Guide](CONTRIBUTING.md)
+### 创建 Docker 容器
+执行 `docker run --name api-server --publish 5000:5000 api-server:default ` 后可在本地浏览器中打开 http://localhost:5000/wuhan2020/{endpoint}. (使用 `-d` 进入detach模式)
 
-## Front-end issues
+_如果出现 `The container name "/api-server" is already in use` 报错可先执行 `docker rm api-server` 删除残留的同名容器._
 
-Plases check [here](https://github.com/wuhan2020/front-pages/issues)
+### 停止 Docker 容器
+执行 `docker stop api-server ` 停止运行中的容器.
+
+## 项目文件说明
+
+```
+.
+├── bootstrap (阿里云serverless启动脚本)
+├── config (flask config dir)
+├── swagger (swagger 暂时还不能用, 待适配.)
+├── test (test 数据目录, 参照wuhan2020的[readme](https://github.com/wuhan2020/wuhan2020), 移除个人的联系方式和银行卡信息.)
+├── wuhan2020 (submoudle, 用于获取data-sync同步过来的数据.)
+├── index.py (flask应用默认配置脚本)
+└── utils.py (flask蓝图, 目前有csv和json的接口, csv的加上了bearer token 认证, json的接口暂时不能用.)
+```
+
+## 配置说明
+
+```
+# Flask config
+Config
+
+# cache dir
+CacheCfg
+ - csv;
+ - json;
+```
+
+## 测试
+
+`dev url`是 `http://127.0.0.1:9000/wuhan2020/xxx_list`
+
+```sh
+# dev
+curl --location --request GET '127.0.0.1:9000/wuhan2020/logistical_list' \
+--header 'Authorization: Bearer test-safe-wuhan'
+# product
+curl --location --request GET '127.0.0.1:9000/wuhan2020/logistical_list' \
+--header 'Authorization: Bearer product-token'
+```
+
+## 遗留问题
+
+- [ ] 添加swagger适配;
+- [ ] csv转换出来都是拍平的字段, 里面有部分中文转英文需要帮助转成合适的英文, 实在找不到用拼音替代.
+
+
+## 前端项目issues
+https://github.com/wuhan2020/WebApp/issues
