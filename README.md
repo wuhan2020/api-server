@@ -3,6 +3,7 @@
 ![Python3.6](https://img.shields.io/badge/python-3.6-green.svg?style=flat-square&logo=python&colorB=blue)
 [![Slack Channel](https://img.shields.io/badge/Slack%20Channel-%23api--server-green.svg?style=flat-square&colorB=blue)](https://app.slack.com/client/TT5U1VCPQ/CT3V5CDKJ)
 [![Built with love](https://img.shields.io/badge/BUILT%20WITH-LOVE-orange?style=flat-square)](https://img.shields.io/badge/BUILT%20WITH-LOVE-orange?style=flat-square&logo=love)
+![Build Status](https://github.com/wuhan2020/api-server/workflows/Tests%20on%20Pull%20Requests%20and%20Master/badge.svg?branch=master&event=push)
 
 [中文文档](README-cn.md)
 
