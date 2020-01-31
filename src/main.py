@@ -1,4 +1,5 @@
 import argparse
+import flask
 from flask import Flask
 from flask import Response as ResponseBase
 import connexion
@@ -41,7 +42,7 @@ app.add_api(
 )
 
 
-def handler(environ, start_response) -> "flask.Flask":
+def handler(environ, start_response) -> flask.Flask:
     """This function is required by the deployment.
 
     For more information, check here:
