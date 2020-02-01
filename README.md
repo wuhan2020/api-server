@@ -11,6 +11,8 @@ This a backend API service of the voluntary information collection and sharing p
 
 The API is designed to be thin and stateless. It relies on the data collected and validated by other sub-projects, transform and expose them through standard RESTful APIs. The service is written in Python and Flask.
 
+![Tech Arch Diagram](https://www.lucidchart.com/publicSegments/view/6ab27659-257a-44ce-a478-46dad3328b9c/image.png)
+
 ## Get Started
 
 Please first clone this repository and the sub-module-repo by:
@@ -31,7 +33,7 @@ Run:
 ```
 docker build -t api-server:default .
 ```
-from the root directory of the clone of this repo. Note this step could take a long time dependd on where you are located in.
+from the root directory of the clone of this repo. Note this step could take a long time depends on where you are located in.
 
 #### Run built Docker image
 
@@ -69,17 +71,9 @@ bash bootstrap
 ```
 now if you open `http://localhost:9000` in your browser, you should see a Swagger page documents the available endpoints.
 
-## Development
+## Contributing Guide
 
-Coming soon...
-
-## Deployment
-
-Coming soon...
-
-## Contributing
-
-Please see [Conntributing Guide](CONTRIBUTING.md)
+Please see [Conntributing Guide](CONTRIBUTING.md) for more information about this project.
 
 ## Front-end issues
 
