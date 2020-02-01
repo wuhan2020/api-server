@@ -11,6 +11,8 @@ This a backend API service of the voluntary information collection and sharing p
 
 The API is designed to be thin and stateless. It relies on the data collected and validated by other sub-projects, transform and expose them through standard RESTful APIs. The service is written in Python and Flask.
 
+![Tech Arch Diagram](https://www.lucidchart.com/publicSegments/view/6ab27659-257a-44ce-a478-46dad3328b9c/image.png)
+
 ## Get Started
 
 Please first clone this repository and the sub-module-repo by:
@@ -71,7 +73,7 @@ now if you open `http://localhost:9000` in your browser, you should see a Swagge
 
 ## Development
 
-Coming soon...
+![DevOps Pipeline](https://www.lucidchart.com/publicSegments/view/b853bf49-31fa-46ba-b732-2eb9de8a2cf8/image.png)
 
 ## Deployment
 
