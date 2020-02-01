@@ -33,7 +33,7 @@ Run:
 ```
 docker build -t api-server:default .
 ```
-from the root directory of the clone of this repo. Note this step could take a long time dependd on where you are located in.
+from the root directory of the clone of this repo. Note this step could take a long time depends on where you are located in.
 
 #### Run built Docker image
 
@@ -71,17 +71,9 @@ bash bootstrap
 ```
 now if you open `http://localhost:9000` in your browser, you should see a Swagger page documents the available endpoints.
 
-## Development
+## Contributing Guide
 
-![DevOps Pipeline](https://www.lucidchart.com/publicSegments/view/b853bf49-31fa-46ba-b732-2eb9de8a2cf8/image.png)
-
-## Deployment
-
-Coming soon...
-
-## Contributing
-
-Please see [Conntributing Guide](CONTRIBUTING.md)
+Please see [Conntributing Guide](CONTRIBUTING.md) for more information about this project.
 
 ## Front-end issues
 
