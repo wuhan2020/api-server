@@ -1,3 +1,5 @@
+# 简体中文 | [English](./README_EN.md) 
+
 # API Server
 
 ![Python3.6](https://img.shields.io/badge/python-3.6-green.svg?style=flat-square&logo=python&colorB=blue)
@@ -5,76 +7,80 @@
 [![Built with love](https://img.shields.io/badge/BUILT%20WITH-LOVE-orange?style=flat-square)](https://img.shields.io/badge/BUILT%20WITH-LOVE-orange?style=flat-square&logo=love)
 ![Build Status](https://github.com/wuhan2020/api-server/workflows/Tests%20on%20Pull%20Requests%20and%20Master/badge.svg?branch=master&event=push)
 
-[中文文档](README-cn.md)
 
-This a backend API service of the voluntary information collection and sharing platform to fight against the 2019-nCoV outbreak in Wuhan and the world. 
+这是一个为了抗击在武汉乃至全球爆发的新型冠状病毒而建设的志愿信息收集和分享平台的后端API服务。
 
-The API is designed to be thin and stateless. It relies on the data collected and validated by other sub-projects, transform and expose them through standard RESTful APIs. The service is written in Python and Flask.
+此API使用Python 和 Flask 编写，意在轻量化和无状态，通过标准的RESTFul接口传输依靠从其他子项目收集并验证的数据。
 
-![Tech Arch Diagram](https://www.lucidchart.com/publicSegments/view/6ab27659-257a-44ce-a478-46dad3328b9c/image.png)
+## 快速上手
 
-## Get Started
-
-Please first clone this repository and the sub-module-repo by:
-
+克隆此仓库及子模块仓库：
 ```
 git clone https://github.com/wuhan2020/api-server
 cd api-server
 git clone https://github.com/wuhan2020/wuhan2020
 ```
 
-### Running locally with Docker (Recommended)
+### 在本地 Docker 容器运行（推荐）
 
-**Pre-requisite: You have to have [Docker client](https://www.docker.com/products/docker-desktop) installed on your machine.**
+首先，你需要安装[Docker客户端](https://www.docker.com/products/docker-desktop).
 
-#### Build the Docker image
+#### 构建 Docker 镜像 
 
-Run:
+在克隆的本仓库根目录下运行:
 ```
 docker build -t api-server:default .
 ```
-from the root directory of the clone of this repo. Note this step could take a long time depends on where you are located in.
+* 注意：这一步耗时取决于所在国家或地区
 
-#### Run built Docker image
+#### 运行已构建的 Docker 镜像
 
-Run:
+运行：
 ```
 docker run --name api-server --publish 9000:9000 api-server:default 
 ```
-and then open `http://localhost:9000` in your browser. _(Add `-d` to run the Docker container in detach/background mode)_
+然后在浏览器中打开 `http://localhost:9000`  。(使用 `-d` 来以后台模式（Detached mode）运行 Docker 容器)
 
-You should see a Swagger page documents the available endpoints now.
+在这一步后你应该可以看到记录了可用的端点的Swagger页面。
 
-_If you ran into error `The container name "/api-server" is already in use`, please run `docker rm api-server` to delete previous container which has the same name._
+如果出现 `The container name "/api-server" is already in use` 报错可先执行 `docker rm api-server` 删除残留的同名容器.
 
-#### Stop running Docker container
+#### 停止运行中的 Docker 容器
 
-Run:
+运行：
 ```
 docker stop api-server 
 ```
-to stop the running container.
+停止运行中的容器.
 
-### Running with your own Python environment
+### 在Python环境中运行
 
-Please make sure you have **Python3.6** installed, (ideally you should be using a [VirtualEnv](https://docs.python.org/3.6/tutorial/venv.html)
-or something like [PyEnv](https://github.com/pyenv/pyenv)). Then from the root directory of the cloned repo, run:
+确保你已经安装 **Python3.6**  (一般来讲你应该会使用 [VirtualEnv](https://docs.python.org/3.6/tutorial/venv.html)
+或是 [PyEnv](https://github.com/pyenv/pyenv)). 然后在克隆仓库的根目录运行：
 
 ```
 pip install -U -r requirements.txt
 ```
 
-and then start the server by:
+启动服务器:
 
 ```
 bash bootstrap
 ```
-now if you open `http://localhost:9000` in your browser, you should see a Swagger page documents the available endpoints.
+在浏览器中打开`http://localhost:9000`，你应该可以看到记录了可用的端点的Swagger页面。.
 
-## Contributing Guide
 
-Please see [Conntributing Guide](CONTRIBUTING.md) for more information about this project.
+## 开发
 
-## Front-end issues
+待更新...
 
-Plases check [here](https://github.com/wuhan2020/front-pages/issues)
+## 部署
+待更新...
+
+## 贡献
+
+参照[贡献指南](CONTRIBUTING.md)
+
+## 前端issues
+
+请查阅[这里](https://github.com/wuhan2020/front-pages/issues)
