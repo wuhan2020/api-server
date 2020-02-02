@@ -1,6 +1,6 @@
 ### Purpose | 本PR解决的问题
 <!-- Please include the GitHub issue this fixes or resolves, if applicable, please also explain any extra purpose of this PR  -->
-<!-- 请在下方附上本PR解决或实现的Iussue编号, 例如 `#1`. 此外如果有, 请尽可能阐述本PR除issue所描述之外的目的 -->
+<!-- 请在下方附上本PR解决或实现的Issue编号, 例如 `#1`. 此外如果有, 请尽可能阐述本PR除issue所描述之外的目的 -->
 
 - Closes #
 
