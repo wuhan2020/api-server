@@ -77,4 +77,4 @@ Please see [Conntributing Guide](CONTRIBUTING.md) for more information about thi
 
 ## Front-end issues
 
-Plases check [here](https://github.com/wuhan2020/front-pages/issues)
+Please check [here](https://github.com/wuhan2020/front-pages/issues)
