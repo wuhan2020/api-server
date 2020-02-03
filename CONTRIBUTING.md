@@ -4,7 +4,7 @@
 
 ![Tech Arch Diagram](https://www.lucidchart.com/publicSegments/view/6ab27659-257a-44ce-a478-46dad3328b9c/image.png)
 
-As the above Tech Arch diagram briefly shows (dot-line entities mean they are not there yet), this project is purely data-driven, the core layout looks like the following:
+As the above Tech Arch diagram shows (dot-line entities mean they are not there yet), this project is purely data-driven and the core layout looks like the following:
 
 ```
 src
@@ -17,9 +17,9 @@ src
 └── utils/
 ```
 
-`main.py` is the entrypoint of the service and it helps:
-- glue all sub API YML files together to a aggregated YML
-- send the YML to connexion which renders the Swagger UI and applies the API resolvers.
+`main.py` is the entry point of the services and it helps:
+- glue all sub API YML files together to an aggregated YML
+- send the YML to connection which renders the Swagger UI and applies the API resolvers.
 - load required service-level connfigurations (such as debug, logging, path to the data sources, etc.).
 
 ### To add new or edit on existing API endpoint(s)
@@ -34,7 +34,7 @@ Be aware that the `operationId` field in the YML files works as automatic router
 
 ![DevOps Pipeline](https://www.lucidchart.com/publicSegments/view/b853bf49-31fa-46ba-b732-2eb9de8a2cf8/image.png)
 
-The above diagram briefly shows how to work on this repo:
+The above diagram shows how to work on this repo:
 
 ### Development Process
 
