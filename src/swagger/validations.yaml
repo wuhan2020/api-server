@@ -186,6 +186,9 @@ components:
           items:
             type: string
             example: 21-221111111
+        email:
+          type: string
+          example: example@163.com
     SuspendItem:
       type: object
       required:

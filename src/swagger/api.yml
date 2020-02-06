@@ -15,7 +15,15 @@ tags:
   - name: Wuhan2020 Data
     description: Get data that's collected and validated by Wuhan2020 volunteers
 
+# Refer to https://swagger.io/docs/specification/using-ref/ for Escape Characters e.g. ~1
 paths:
-  $ref: "accommodations.yml#/paths"
+  /accommodation/all:
+    $ref: "accommodations.yml#/paths/~1accommodation~1all"
+  /hospital/all:
+    $ref: "hospitals.yml#/paths/~1hospital~1all"
 components:
-  $ref: "accommodations.yml#/components/schemas"
+  schemas:
+    AccommodationItem:
+      $ref: "accommodations.yml#/components/schemas/AccommodationItem"
+    HospitalItem:
+      $ref: "hospitals.yml#/components/schemas/HospitalItem"
