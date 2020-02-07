@@ -24,7 +24,7 @@ def aggregate_specs(main_file: Path) -> Dict[str, Any]:
     to use something like $ref: 'another.yaml#/components/schemas/Foo'
     in the YML files.
     """
-    parser = prance.ResolvingParser(str(main_file.absolute()), lazy=True, strict=False)
+    parser = prance.ResolvingParser(str(main_file.absolute()), lazy=True, strict=True)
     parser.parse()
     return parser.specification
 

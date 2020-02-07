@@ -1,0 +1,78 @@
+paths:
+  /hospital/all:
+    get:
+      tags:
+        - Wuhan2020 Data
+      summary: Search for all available hospitals
+      operationId: src.api.hospitals.get_all
+      description: |
+        By passing in the appropriate options, 
+        you can get all of the available hospitals
+        or query for specific hospitals in the system
+      parameters:
+        - in: query
+          name: skip
+          description: number of records to skip for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            default: 0
+        - in: query
+          name: limit
+          description: maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+            default: 50
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/HospitalItem"
+        "400":
+          $ref: "errors.yml#/components/BadRequest"
+        "500":
+          $ref: "errors.yml#/components/InternalServerError"
+        # Definition of all other error statuses
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "errors.yml#/components/schemas/Error"
+
+components:
+  schemas:
+    HospitalItem:
+      type: object
+      required:
+        - id
+        - name
+        - city
+        - address
+        - releaseDate
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: 武汉第一人民医院
+        city:
+          type: string
+          example: 武汉市
+        address:
+          type: string
+          example: 湖北省武汉市东湖路169号 武汉大学中南医院
+        releaseDate:
+          type: string
+          format: date-time
+          example: "2016-08-29T09:12:33.001Z"

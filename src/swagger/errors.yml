@@ -1,0 +1,42 @@
+# This YML defines the Error Response
+# for most of the errors
+components:
+  # 500
+  InternalServerError:
+    description: The server cannot process the request for an unknown reason
+    content:
+      application/json:
+        schema:
+          $ref: "#/components/schemas/Error"
+  # 400
+  BadRequest:
+    description: The HTTP request that was sent to the server has invalid syntax
+    content:
+      application/json:
+        schema:
+          $ref: "#/components/schemas/Error"
+  # 404
+  NotFound:
+    description: The specified resource was not found
+    content:
+      application/json:
+        schema:
+          $ref: "#/components/schemas/Error"
+  # 401
+  Unauthorized:
+    description: Unauthorized
+    content:
+      application/json:
+        schema:
+          $ref: "#/components/schemas/Error"
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+          example: "Error message shows here."
+      required:
+        - message
