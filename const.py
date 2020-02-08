@@ -32,7 +32,7 @@ factory_medical_supplies = [
     ('医用面罩式雾化器', ),
     ('测体温设备', ),
     ('空气消毒设备', ),
-    ('医用紫外线消毒车', ),
+    ('医用紫外线消毒车', )
 ]
 
 """
@@ -45,7 +45,7 @@ DONATION_HEADERS = [
     'donate_account_info',
     'donate_cur_status',
     'donate_audit_status',
-    'donate_audit_person',
+    'donate_audit_person'
 ]
 FACTORY_HEADERS = [
     'factory_prov',
@@ -57,7 +57,7 @@ FACTORY_HEADERS = [
     'factory_note',
     'factory_link',
     'factory_audit_status',
-    'factory_reviewer',
+    'factory_reviewer'
 ]
 CLINIC_HEADERS = [
     'clinic_unit',
@@ -76,7 +76,7 @@ HOTEL_HEADERS = [
     'hotel_note',
     'hotel_link',
     'hotel_audit_status',
-    'hotel_audit_person',
+    'hotel_audit_person'
 ]
 LOGISTICS_HEADERS = [
     'logistics_name',
@@ -100,5 +100,5 @@ HOSPITAL_HEADERS = [
     'hospital_contact',
     'hospital_note',
     'hospital_audit_status',
-    'hospital_audit_person',
+    'hospital_audit_person'
 ]
